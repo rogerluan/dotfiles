@@ -15,4 +15,10 @@ fi
 # Xcode creates its own copy for it, so it won't be version-controlled, unfortunately.
 ln -s $DIR/Solarized\ Dark.xccolortheme $DESTDIR/Solarized\ Dark.xccolortheme
 
-echo " * Done! Solarized Dark for Xcode has been installed. Select this theme from Xcode."
+# Set Xcode appearance to Dark Mode
+defaults write com.apple.dt.Xcode IDEAppearance -int 2
+
+# Select Solarized Dark as the current dark theme in Xcode.
+defaults write com.apple.dt.Xcode XCFontAndColorCurrentDarkTheme -string "Solarized Dark.xccolortheme"
+
+echo " * Done! Solarized Dark for Xcode has been installed."
