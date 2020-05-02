@@ -1,11 +1,11 @@
 #!/bin/bash
 
-set -e # Immediately rethrows exceptions
-set -x # Logs every command on Terminal
-
 ################################################################################
 ### Install Applications
 ################################################################################
+
+set -e # Immediately rethrows exceptions
+set -x # Logs every command on Terminal
 
 # Homebrew - https://brew.sh
 echo " * Installing Homebrew"

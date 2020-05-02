@@ -1,5 +1,9 @@
 #!/bin/bash
 
+################################################################################
+### Configure Commit Signing (GPG)
+################################################################################
+
 set -x # Logs every command on Terminal
 
 function toClipboard {
@@ -12,10 +16,6 @@ function toClipboard {
    cat -
  fi
 }
-
-################################################################################
-### Configure Commit Signing (GPG)
-################################################################################
 
 brew install gnupg
 echo "Press enter next"

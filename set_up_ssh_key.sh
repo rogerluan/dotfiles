@@ -1,5 +1,9 @@
 #!/bin/bash
 
+################################################################################
+### Configure SSH key
+################################################################################
+
 set -e # Immediately rethrows exceptions
 
 function toClipboard {
@@ -12,10 +16,6 @@ function toClipboard {
    cat -
  fi
 }
-
-################################################################################
-### Configure SSH key
-################################################################################
 
 # Generate new SSH key
 echo "Just press enter on this next iteration, and then create a memorable passphrase"
