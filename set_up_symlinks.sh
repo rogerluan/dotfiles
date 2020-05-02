@@ -4,8 +4,6 @@
 ### Set up symbolic links
 ################################################################################
 
-set -e # Immediately rethrows exceptions
-
 # DOTFILES_DIR may have not been initialized yet, if this is the first time setting up .zshrc
 source .exports
 
