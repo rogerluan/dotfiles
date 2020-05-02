@@ -1,0 +1,24 @@
+#!/bin/bash
+
+################################################################################
+### Configure System-Wide Aliases
+################################################################################
+
+# Tellus
+alias tellus="\
+    open /Users/rogerluan/Documents/Projects/tellus-core-ios/tellus-core.xcworkspace
+    open /Users/rogerluan/Documents/Projects/tellus-ios/zilly.xcworkspace"
+
+# See https://hub.github.com/hub-sync.1.html
+function tellus-sync() {
+  echo "hub sync on tellus-ios"
+  ( cd ~/Documents/Projects/tellus-ios && hub sync )
+  echo "hub sync on tellus-core-ios"
+  ( cd ~/Documents/Projects/tellus-core-ios && hub sync )
+  echo "hub sync on tellus-android"
+  ( cd ~/Documents/Projects/tellus-android && hub sync )
+  echo "hub sync on tellus-core-android"
+  ( cd ~/Documents/Projects/tellus-core-android && hub sync )
+}
+
+alias plistbuddy="/usr/libexec/PlistBuddy"
