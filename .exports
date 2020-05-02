@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Preferred editor for local and remote sessions
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='nano'
+else
+  export EDITOR='nano'
+fi
+
+# Prefer US English and use UTF-8.
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+# Avoid issues with `gpg` as installed via Homebrew.
+# https://stackoverflow.com/a/42265848/96656
+export GPG_TTY=$(tty);
+
+export DOTFILES_DIR="$HOME/.dotfiles"
