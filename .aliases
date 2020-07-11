@@ -11,14 +11,25 @@ alias tellus="\
 
 # See https://hub.github.com/hub-sync.1.html
 function tellus-sync() {
-  echo "hub sync on tellus-ios"
-  ( cd ~/Documents/Projects/tellus-ios && hub sync )
-  echo "hub sync on tellus-core-ios"
-  ( cd ~/Documents/Projects/tellus-core-ios && hub sync )
-  echo "hub sync on tellus-android"
-  ( cd ~/Documents/Projects/tellus-android && hub sync )
-  echo "hub sync on tellus-core-android"
-  ( cd ~/Documents/Projects/tellus-core-android && hub sync )
+  for dir in $HOME/Documents/Projects/tellus*; do
+    echo "hub sync on $dir"
+    ( cd $dir && hub sync )
+  done
+
+  for dir in $HOME/Documents/Projects/zilly*; do
+    echo "hub sync on $dir"
+    ( cd $dir && hub sync )
+  done
 }
 
 alias plistbuddy="/usr/libexec/PlistBuddy"
+
+function s() {
+  PARAM=$1
+	if [[ $PARAM = "all" || $PARAM = "a" ]]; then
+		tellus-sync
+	else
+    echo "hub sync on $PARAM"
+    ( cd ~/Documents/Projects/$PARAM && hub sync )
+	fi
+}
