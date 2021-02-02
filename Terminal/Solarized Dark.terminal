@@ -266,6 +266,8 @@
 	<true/>
 	<key>ShowRepresentedURLInTitle</key>
 	<true/>
+	<key>ShowRepresentedURLPathInTabTitle</key>
+	<true/>
 	<key>ShowRepresentedURLPathInTitle</key>
 	<true/>
 	<key>ShowShellCommandInTitle</key>
