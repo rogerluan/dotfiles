@@ -12,3 +12,4 @@ ln -s $DOTFILES_DIR/.zshrc $HOME/.zshrc
 ln -s $DOTFILES_DIR/.zshenv $HOME/.zshenv
 ln -s $DOTFILES_DIR/.aliases $HOME/.aliases
 ln -s $DOTFILES_DIR/.exports $HOME/.exports
+ln -s $DOTFILES_DIR/.paths $HOME/.paths
