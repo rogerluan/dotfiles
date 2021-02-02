@@ -174,10 +174,6 @@ sudo defaults write /Library/Preferences/com.apple.loginwindow showInputMenu -bo
 # Power Management                                                             #
 ################################################################################
 
-# Stop iTunes from responding to the keyboard media keys (e.g. doesn't
-# autolaunch iTunes just because you pressed Play and Spotify was closed)
-launchctl unload -w /System/Library/LaunchAgents/com.apple.rcd.plist 2> /dev/null
-
 # Set machine sleep to X minutes while charging. Set 0 for "never"
 sudo pmset -c sleep 0
 
