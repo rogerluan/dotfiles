@@ -49,15 +49,15 @@ echo " * Installing Prettier"
 brew install prettier
 echo " * Prettier installed successfully!"
 
-# ktlint - https://github.com/pinterest/ktlint
-echo " * Installing ktlint"
-brew install ktlint
-echo " * ktlint installed successfully!"
+# # ktlint - https://github.com/pinterest/ktlint
+# echo " * Installing ktlint"
+# brew install ktlint
+# echo " * ktlint installed successfully!"
 
-# Arena - https://github.com/finestructure/Arena
-echo " * Installing Arena"
-brew install finestructure/tap/arena
-echo " * Arena installed successfully!"
+# # Arena - https://github.com/finestructure/Arena
+# echo " * Installing Arena"
+# brew install finestructure/tap/arena
+# echo " * Arena installed successfully!"
 
 # Arena - https://github.com/peripheryapp/periphery
 echo " * Installing Periphery"
