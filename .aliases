@@ -5,21 +5,22 @@
 ################################################################################
 
 # Tellus
-alias tellus="\
-    open /Users/rogerluan/Documents/Projects/tellus-core-ios/tellus-core.xcworkspace
-    open /Users/rogerluan/Documents/Projects/tellus-ios/zilly.xcworkspace"
+alias tellus="open /Users/rogerluan/Documents/Projects/tellus-ios/zilly.xcworkspace"
 
 # See https://hub.github.com/hub-sync.1.html
 function tellus-sync() {
   for dir in $HOME/Documents/Projects/tellus*; do
-    echo "hub sync on $dir"
-    ( cd $dir && hub sync )
+    if [[ "$dir" =~ tellus-core ]]; then
+      : # No-op
+    else
+      echo "hub sync on $dir"
+      ( cd $dir && hub sync )
+    fi
   done
 
-  for dir in $HOME/Documents/Projects/zilly*; do
-    echo "hub sync on $dir"
-    ( cd $dir && hub sync )
-  done
+  BACKEND_DIR="$HOME/Documents/Projects/zilly-backend"
+  echo "hub sync on $BACKEND_DIR"
+  ( cd $BACKEND_DIR && hub sync )
 }
 
 alias plistbuddy="/usr/libexec/PlistBuddy"
@@ -28,8 +29,52 @@ function s() {
   PARAM=$1
 	if [[ $PARAM = "all" || $PARAM = "a" ]]; then
 		tellus-sync
+    echo "hub sync on fastlane/fastlane"
+    (
+      cd $HOME/Documents/Projects/fastlane &&
+      hub_sync_results=$(hub sync 2>&1)
+      swift $DOTFILES_DIR/Utilities/delete_local_branches_from_hub_sync.swift "$hub_sync_results"
+    )
 	else
     echo "hub sync on $PARAM"
     ( cd ~/Documents/Projects/$PARAM && hub sync )
 	fi
 }
+
+# Opens a Sourcetree window using the given path, if needed.
+# Example: `sourcetree .` opens a new Sourcetree window for the current directory
+#          or focuses on the open one if there's one open already.
+function sourcetree() {
+  open -a Sourcetree "$1"
+}
+
+function doit() {
+  sourcetree "$1"
+  atom "$1"
+}
+
+# This command kills and relaunches several audio and bluetooth related processes,
+# fixing issues bluetooth headsets malfunctioning.
+function killaudio() {
+  sudo kill `pgrep coreaudiod`
+  sudo kill `pgrep bluetoothd`
+  sudo kextunload -b com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport
+  sudo kextload -b com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport
+  sudo kextunload -b com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport
+}
+
+function update-target() {
+  TARGET_ARGUMENT="${3##--target:}" # e.g. 'someoneelse:anotherbranch' or 'revolter/fix-slack-head-branch' or 'rogerluan-fix-important-feature'
+
+  if [[ $TARGET_ARGUMENT =~ : ]]; then
+    source $DOTFILES_DIR/Utilities/update_fork.sh "$@"
+  else
+    source $DOTFILES_DIR/Utilities/update_branch.sh "$@"
+  fi
+}
+
+# gpg-agent eventually dies, randomly, failing to sign commits. This command kills existing gpg-agent process and relaunches it.
+alias killgpg="pkill gpg-agent && gpg-agent --daemon"
+
+# Opens the Google Play Store console (beta view), ready to publish a new version of the app
+alias playstore="open -a safari https://play.google.com/console/u/1/developers/6280656057399977520/app-list"
