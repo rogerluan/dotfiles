@@ -9,6 +9,8 @@ source $DOTFILES_DIR/_encrypt.sh $1
 
 FONT_AND_COLOR_THEMES_DIR="$HOME/Library/Developer/Xcode/UserData/FontAndColorThemes"
 CODE_SNIPPETS_DIR="$HOME/Library/Developer/Xcode/UserData/CodeSnippets"
+echo "Copying ~/.config/powerline-shell/config.json…"
+cp $HOME/.config/powerline-shell/config.json $DOTFILES_DIR/Terminal/powerline-shell-config.json
 
 echo "Copying Xcode font and color themes…"
 cp -r $FONT_AND_COLOR_THEMES_DIR $DOTFILES_DIR/Xcode

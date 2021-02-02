@@ -34,3 +34,7 @@ open $DIR/Solarized\ Dark.terminal
 # Make this theme the default one
 defaults write com.apple.Terminal "Default Window Settings" -string "Solarized Dark"
 defaults write com.apple.Terminal "Startup Window Settings" -string "Solarized Dark"
+
+echo "Copying $DOTFILES_DIR/Terminal/powerline-shell-config.json → $HOME/.config/powerline-shell/config.json"
+mkdir -p $HOME/.config/powerline-shell/
+cp $DOTFILES_DIR/Terminal/powerline-shell-config.json $HOME/.config/powerline-shell/config.json
