@@ -15,6 +15,8 @@ declare -a FILES_TO_ENCRYPT=(
   ".tellus"
   ".secrets"
   ".z"
+  ".zsh_history"
+  "BitBarPlugins"
 )
 
 # Encrypt files or directories
