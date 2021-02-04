@@ -2,7 +2,7 @@
 
 # Shamelessly copied from https://stackoverflow.com/a/246128/4075379
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-DESTDIR=~/Library/Developer/Xcode/UserData/FontAndColorThemes/
+DESTDIR="$HOME/Library/Developer/Xcode/UserData/FontAndColorThemes"
 
 echo " * Installing Solarized Dark for Xcode. . ."
 mkdir -p $DESTDIR
