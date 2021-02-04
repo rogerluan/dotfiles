@@ -1,6 +1,6 @@
 #!/bin/bash
 
-KEY=$1
+KEY="$1"
 
 if [[ -z $KEY ]]; then
   echo "The cyphering key is empty."

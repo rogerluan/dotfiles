@@ -1,6 +1,6 @@
 #!/bin/bash
 
-KEY=$1
+KEY="$1"
 
 function decrypt() {
   SOURCE=$1
