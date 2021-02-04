@@ -10,6 +10,6 @@ source set_up_commit_signing.sh
 source set_up_encrypted_resources.sh
 source set_up_symlinks.sh
 source set_up_user_defaults.sh
-source set_up_terminal.sh
+source Terminal/set_up_terminal.sh
 source Xcode/install_xcode_solarized_dark.sh
 source Xcode/install_xcode_code_snippets.sh
