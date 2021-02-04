@@ -2,6 +2,11 @@
 
 KEY="$1"
 
+if [[ -z $KEY ]]; then
+  echo "The cyphering key is empty."
+  exit 1
+fi
+
 function decrypt() {
   SOURCE=$1
   echo "Decrypting from '$SOURCE'"
