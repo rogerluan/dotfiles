@@ -3,4 +3,6 @@ export PATH="$HOME/Library/Python/2.7/bin:$PATH"
 # export PATH="/usr/local/opt/ruby/bin:$PATH"
 export PATH="$HOME/.rbenv/shims:$PATH"
 export PATH="$HOME/.rbenv/bin:$PATH"
-export PATH="/usr/local/opt/make/libexec/gnubin:$PATH"
+
+# Enable use of `gmake` aliased as `make`
+export PATH="/usr/local/opt/make/libexec/gnubin:$PATH" 
