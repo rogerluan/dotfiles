@@ -41,7 +41,10 @@ echo " * Heroku installed successfully!"
 
 # Danger - https://danger.systems
 echo " * Installing Danger"
-brew install danger/tap/danger-swift
+# Grab the latest Danger JS from npm
+# Explicitly don't install the ruby version, or the one from brew,
+# because it causes namespace conflicts when executing the swift one.
+npm install -g danger
 echo " * Danger installed successfully!"
 
 # Prettier - https://prettier.io
