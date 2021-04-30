@@ -50,7 +50,11 @@ function sourcetree() {
 
 function doit() {
   sourcetree "$1"
-  atom "$1"
+  txt "$1"
+}
+
+function txt() {
+  "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" "$1"
 }
 
 # This command kills and relaunches several audio and bluetooth related processes,
