@@ -17,6 +17,7 @@ declare -a FILES_TO_ENCRYPT=(
   ".z"
   ".zsh_history"
   "BitBarPlugins"
+  ".atom/keymap.cson"
 )
 
 # Encrypt files or directories
