@@ -67,6 +67,8 @@ function killaudio() {
   sudo kextunload -b com.apple.iokit.BroadcomBluetoothHostControllerUSBTransport
 }
 
+# Usage:
+# update-target --base-org:rogerluan --repo-name:dotfiles --target:someorg:perhapsabranch
 function update-target() {
   TARGET_ARGUMENT="${3##--target:}" # e.g. 'someoneelse:anotherbranch' or 'revolter/fix-slack-head-branch' or 'rogerluan-fix-important-feature'
 

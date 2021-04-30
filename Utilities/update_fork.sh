@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Usage:
+# /path/to/this/script --base-org:rogerluan --repo-name:dotfiles --target:someorg:perhapsabranch
+
 set -e # Immediately rethrows exceptions
 
 BASE_ORG="${1##--base-org:}" # e.g. 'rogerluan'
