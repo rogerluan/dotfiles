@@ -20,6 +20,7 @@ echo " * rbenv installed successfully!"
 # Ruby - https://www.ruby-lang.org/en/
 echo " * Installing Ruby 2.6.5"
 rbenv install 2.6.5
+rbenv install 2.7.2
 rbenv global 2.6.5
 echo " * Ruby 2.6.5 installed successfully!"
 
