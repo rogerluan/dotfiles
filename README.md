@@ -44,41 +44,41 @@ dependencies that could manage their installation.
 
 ## Direct Download
 
-- Sublime Text (sync settings via `Sync Settings` package)
-- Xcode - Install all the version needed via [xcode-install](https://github.com/xcpretty/xcode-install)
 - Android Studio https://developer.android.com/studio   
-- SourceTree https://www.sourcetreeapp.com
-- SizeUp http://www.irradiatedsoftware.com/sizeup/
-- Toggl https://toggl.github.io/toggldesktop/download/macos-stable/
-- Google Chrome https://www.google.com/chrome/
-- RescueTime https://www.rescuetime.com/get_rescuetime
-- MagicPrefs http://magicprefs.com/MagicPrefs.app.zip
-- ExpressVPN https://www.expressvpn.com/setup
-- Zoom https://zoom.us/client/latest/zoomusInstaller.pkg
-- Insomnia https://insomnia.rest
-- GPG Suite https://gpgtools.org
-- Popcorn Time https://popcorntime.sh
-- VLC https://www.videolan.org/vlc/
-- Jumpshare https://jumpshare.com/downloading
-- Spotify https://www.spotify.com/br/download/mac/
-- WhatsApp https://www.whatsapp.com/download/
 - Charles https://www.charlesproxy.com/download/
-- LSUnusedResources https://github.com/tinymind/LSUnusedResources
-- TinyPNG4Mac https://github.com/kyleduo/TinyPNG4Mac
+- ExpressVPN https://www.expressvpn.com/setup
 - Figma https://www.figma.com/download/desktop/mac
+- Google Chrome https://www.google.com/chrome/
+- GPG Suite https://gpgtools.org
+- Insomnia https://insomnia.rest
+- Jumpshare https://jumpshare.com/downloading
+- LSUnusedResources https://github.com/tinymind/LSUnusedResources
+- MagicPrefs http://magicprefs.com/MagicPrefs.app.zip
+- Popcorn Time https://popcorntime.sh
+- RescueTime https://www.rescuetime.com/get_rescuetime
+- SizeUp http://www.irradiatedsoftware.com/sizeup/
+- SourceTree https://www.sourcetreeapp.com
+- Spotify https://www.spotify.com/br/download/mac/
+- Sublime Text (sync settings via `Sync Settings` package)
+- TinyPNG4Mac https://github.com/kyleduo/TinyPNG4Mac
+- Toggl https://toggl.github.io/toggldesktop/download/macos-stable/
+- VLC https://www.videolan.org/vlc/
+- WhatsApp https://www.whatsapp.com/download/
+- Xcode - Install all the version needed via [xcode-install](https://github.com/xcpretty/xcode-install)
+- Zoom https://zoom.us/client/latest/zoomusInstaller.pkg
 
 ## App Store
 
 - AdBlock
 - AdBlock Plus
-- Telegram
-- Pages
-- Numbers
-- Keynote
-- Slack
 - Git Streak
+- Keynote
+- Numbers
+- Pages
 - RAR Extractor Lite
+- Slack
 - SortingMatters
+- Telegram
 
 ## Dock Pinned Applications
 
