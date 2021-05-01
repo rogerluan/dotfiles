@@ -469,6 +469,12 @@ defaults write ru.keepcoder.Telegram kForceTouchAction -int 1
 defaults write ru.keepcoder.Telegram kAutomaticConvertEmojiesType2 -bool true
 
 ################################################################################
+# MagicPrefs                                                                   #
+################################################################################
+
+defaults write com.vladalexa.MagicPrefs noMenubarIcon -bool true
+
+################################################################################
 # Finish                                                                       #
 ################################################################################
 
