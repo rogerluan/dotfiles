@@ -93,7 +93,7 @@ defaults write -g NSUserKeyEquivalents -dict-add "Strikethrough" "@\$x"
 defaults write com.github.atom NSUserKeyEquivalents -dict-add "Auto Indent" "^i"
 
 # Add keyboard shortcut `ctrl + shift + i` to Sort Selected Lines
-# (requires installing https://github.com/FranciscoAmado/Sortify/)
+# (requires SortingMatters https://apps.apple.com/us/app/sortingmatters/id1556795117?mt=12)
 defaults write com.apple.dt.Xcode NSUserKeyEquivalents -dict-add "Sort Selected Lines" "^\$i"
 
 ################################################################################
