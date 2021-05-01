@@ -423,6 +423,11 @@ defaults write com.apple.dt.Xcode IDEIndexerActivityShowNumericProgress -bool YE
 # Enable project build time
 defaults write com.apple.dt.Xcode ShowBuildOperationDuration -bool YES
 
+defaults write com.apple.dt.Xcode IDEEditorCoordinatorTarget_DoubleClick -string "SameAsClick"
+defaults write com.apple.dt.Xcode IDEEditorNavigationStyle_DefaultsKey -string "IDEEditorNavigationStyle_OpenInPlace"
+defaults write com.apple.dt.Xcode IDEIssueNavigatorDetailLevel -int 4
+defaults write com.apple.dt.Xcode IDESearchNavigatorDetailLevel -int 4
+
 ################################################################################
 # SourceTree                                                                   #
 ################################################################################
