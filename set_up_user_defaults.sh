@@ -156,6 +156,16 @@ defaults write com.apple.dock wvous-br-corner -int 4
 defaults write com.apple.dock wvous-br-modifier -int 0
 
 ################################################################################
+# Touch Bar                                                                    #
+################################################################################
+
+# Set the touch bar to be a fixed control strip
+defaults write com.apple.touchbar.agent PresentationModeGlobal -string "fullControlStrip"
+
+# Configure which controls will be shown on the strip
+defaults write com.apple.controlstrip FullCustomized -array "com.apple.system.group.brightness" "com.apple.system.screen-lock" "NSTouchBarItemIdentifierFlexibleSpace" "com.apple.system.group.media" "com.apple.system.group.volume"
+
+################################################################################
 # Language & Region                                                            #
 ################################################################################
 
