@@ -442,6 +442,24 @@ defaults write com.torusknot.SourceTreeNotMAS diffSkipFilePatterns -string "*.pb
 # Sets the GPG binary location
 defaults write com.torusknot.SourceTreeNotMAS gpgProgram -string "/usr/local/MacGPG2/bin"
 
+defaults write com.torusknot.SourceTreeNotMAS fileStatusStagingViewMode -int 1
+defaults write com.torusknot.SourceTreeNotMAS fileStatusViewMode2 -int 0
+# Skip tutorials
+defaults write com.torusknot.SourceTreeNotMAS showStagingTip -bool false
+defaults write com.torusknot.SourceTreeNotMAS DidShowGettingStarted -bool true
+# Enable Dark Mode
+defaults write com.torusknot.SourceTreeNotMAS currentTheme -int 1
+# Don't restore windows on startup
+defaults write com.torusknot.SourceTreeNotMAS windowRestorationMethod -int 1
+# Use fixed-width font for commit messages
+defaults write com.torusknot.SourceTreeNotMAS useFixedWithCommitFont -bool true
+# Display column guide in commit message at character: 50
+defaults write com.torusknot.SourceTreeNotMAS commitColumnGuideWidth -int 50
+# Keep bookmarks closed on startup
+defaults write com.torusknot.SourceTreeNotMAS bookmarksClosedOnStartup -bool true
+# Ask to bookmark upon opening new repo
+defaults write com.torusknot.SourceTreeNotMAS bookmarksWindowOpen -bool false
+
 ################################################################################
 # Finish                                                                       #
 ################################################################################
