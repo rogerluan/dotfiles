@@ -461,6 +461,14 @@ defaults write com.torusknot.SourceTreeNotMAS bookmarksClosedOnStartup -bool tru
 defaults write com.torusknot.SourceTreeNotMAS bookmarksWindowOpen -bool false
 
 ################################################################################
+# Telegram                                                                     #
+################################################################################
+
+defaults write ru.keepcoder.Telegram NSNavLastRootDirectory -string "~/Downloads"
+defaults write ru.keepcoder.Telegram kForceTouchAction -int 1
+defaults write ru.keepcoder.Telegram kAutomaticConvertEmojiesType2 -bool true
+
+################################################################################
 # Finish                                                                       #
 ################################################################################
 
