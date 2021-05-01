@@ -44,10 +44,8 @@ dependencies that could manage their installation.
 
 ## Direct Download
 
-- Atom https://atom.io
-    - markdown-preview: https://atom.io/packages/markdown-preview
-    - language-patch: https://atom.io/packages/language-patch
-- Xcode https://developer.apple.com/download/more/
+- Sublime Text (sync settings via `Sync Settings` package)
+- Xcode - Install all the version needed via [xcode-install](https://github.com/xcpretty/xcode-install)
 - Android Studio https://developer.android.com/studio   
 - SourceTree https://www.sourcetreeapp.com
 - SizeUp http://www.irradiatedsoftware.com/sizeup/
@@ -62,6 +60,12 @@ dependencies that could manage their installation.
 - Popcorn Time https://popcorntime.sh
 - VLC https://www.videolan.org/vlc/
 - Jumpshare https://jumpshare.com/downloading
+- Spotify https://www.spotify.com/br/download/mac/
+- WhatsApp https://www.whatsapp.com/download/
+- Charles https://www.charlesproxy.com/download/
+- LSUnusedResources https://github.com/tinymind/LSUnusedResources
+- TinyPNG4Mac https://github.com/kyleduo/TinyPNG4Mac
+- Figma https://www.figma.com/download/desktop/mac
 
 ## App Store
 
@@ -72,6 +76,9 @@ dependencies that could manage their installation.
 - Numbers
 - Keynote
 - Slack
+- Git Streak
+- RAR Extractor Lite
+- SortingMatters
 
 ## Dock Pinned Applications
 
