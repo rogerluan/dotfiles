@@ -101,7 +101,10 @@ defaults write com.apple.dt.Xcode NSUserKeyEquivalents -dict-add "Sort Selected 
 ################################################################################
 
 # Move the spotlight bar to the top right corner of the screen
-defaults write com.apple.Spotlight lastWindowPosition -string "{{987, 585}, {680, 430}}"
+defaults write com.apple.Spotlight lastWindowPosition -string "{{984, 950}, {680, 52}}"
+defaults write com.apple.Spotlight userHasMovedWindow -bool true
+# Skip showing the "learn more" tutorial
+defaults write com.apple.Spotlight showedLearnMore -bool true
 
 ################################################################################
 # Trackpad                                                                     #
