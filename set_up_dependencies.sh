@@ -34,6 +34,11 @@ echo " * Installing hub"
 brew install hub
 echo " * hub installed successfully!"
 
+# xcode-install - https://github.com/xcpretty/xcode-install
+echo " * Installing xcode-install"
+sudo gem install xcode-install
+echo " * xcode-install installed successfully!"
+
 # Heroku - https://devcenter.heroku.com/articles/heroku-cli
 echo " * Installing Heroku"
 brew tap heroku/brew
