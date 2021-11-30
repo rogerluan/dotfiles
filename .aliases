@@ -86,3 +86,8 @@ alias killgpg="pkill gpg-agent && gpg-agent --daemon"
 alias playstore="open -a safari https://play.google.com/console/u/1/developers/6280656057399977520/app-list"
 
 alias uuid=uuidgen
+
+# Generates a git changelog from the current directory from the parameter's tag to current HEAD.
+function changelog() {
+  git log --pretty='* %s' "$1"...HEAD | grep "* #"
+}
