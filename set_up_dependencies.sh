@@ -13,16 +13,15 @@ echo " * Installing Homebrew"
 echo " * Homebrew installed successfully!"
 
 # rbenv - https://github.com/rbenv/rbenv
-echo " * Installing rbenv"
+echo " * Installing rbenv and ruby-build"
 brew install rbenv ruby-build
 echo " * rbenv installed successfully!"
 
 # Ruby - https://www.ruby-lang.org/en/
-echo " * Installing Ruby 2.6.5"
-rbenv install 2.6.5
-rbenv global 2.6.5
-echo " * Ruby 2.6.5 installed successfully!"
-
+echo " * Installing Ruby 2.7.5"
+rbenv install 2.7.5
+rbenv global 2.7.5
+echo " * Ruby 2.7.5 installed successfully!"
 
 # hub - https://hub.github.com
 echo " * Installing hub"
