@@ -9,7 +9,7 @@ set -x # Logs every command on Terminal
 
 # Homebrew - https://brew.sh
 echo " * Installing Homebrew"
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 echo " * Homebrew installed successfully!"
 
 # rbenv - https://github.com/rbenv/rbenv
