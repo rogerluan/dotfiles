@@ -21,3 +21,5 @@ export DOTFILES_DIR="$HOME/.dotfiles"
 export MAGICK_HOME=/usr/local/Cellar/imagemagick@6/6.9.11-28/
 
 export THEOS=~/theos
+
+export NVM_DIR="$HOME/.nvm"
