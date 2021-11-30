@@ -84,3 +84,5 @@ alias killgpg="pkill gpg-agent && gpg-agent --daemon"
 
 # Opens the Google Play Store console (beta view), ready to publish a new version of the app
 alias playstore="open -a safari https://play.google.com/console/u/1/developers/6280656057399977520/app-list"
+
+alias uuid=uuidgen
