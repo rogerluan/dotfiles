@@ -22,4 +22,6 @@ export MAGICK_HOME=/usr/local/Cellar/imagemagick@6/6.9.11-28/
 
 export THEOS=~/theos
 
+export APPLE_SILICON=true
+
 export NVM_DIR="$HOME/.nvm"
