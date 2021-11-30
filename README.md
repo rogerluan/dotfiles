@@ -44,34 +44,41 @@ dependencies that could manage their installation.
 
 ## Direct Download
 
-- Atom https://atom.io
-    - markdown-preview: https://atom.io/packages/markdown-preview
-    - language-patch: https://atom.io/packages/language-patch
-- Xcode https://developer.apple.com/download/more/
 - Android Studio https://developer.android.com/studio   
-- SourceTree https://www.sourcetreeapp.com
-- SizeUp http://www.irradiatedsoftware.com/sizeup/
-- Toggl https://toggl.github.io/toggldesktop/download/macos-stable/
-- Google Chrome https://www.google.com/chrome/
-- RescueTime https://www.rescuetime.com/get_rescuetime
-- MagicPrefs http://magicprefs.com/MagicPrefs.app.zip
+- Charles https://www.charlesproxy.com/download/
 - ExpressVPN https://www.expressvpn.com/setup
-- Zoom https://zoom.us/client/latest/zoomusInstaller.pkg
-- Insomnia https://insomnia.rest
+- Figma https://www.figma.com/download/desktop/mac
+- Google Chrome https://www.google.com/chrome/
 - GPG Suite https://gpgtools.org
-- Popcorn Time https://popcorntime.sh
-- VLC https://www.videolan.org/vlc/
+- Insomnia https://insomnia.rest
 - Jumpshare https://jumpshare.com/downloading
+- LSUnusedResources https://github.com/tinymind/LSUnusedResources
+- MagicPrefs http://magicprefs.com/MagicPrefs.app.zip
+- Popcorn Time https://popcorntime.sh
+- RescueTime https://www.rescuetime.com/get_rescuetime
+- SizeUp http://www.irradiatedsoftware.com/sizeup/
+- SourceTree https://www.sourcetreeapp.com
+- Spotify https://www.spotify.com/br/download/mac/
+- Sublime Text (sync settings via `Sync Settings` package)
+- TinyPNG4Mac https://github.com/kyleduo/TinyPNG4Mac
+- Toggl https://toggl.github.io/toggldesktop/download/macos-stable/
+- VLC https://www.videolan.org/vlc/
+- WhatsApp https://www.whatsapp.com/download/
+- Xcode - Install all the version needed via [xcode-install](https://github.com/xcpretty/xcode-install)
+- Zoom https://zoom.us/client/latest/zoomusInstaller.pkg
 
 ## App Store
 
 - AdBlock
 - AdBlock Plus
-- Telegram
-- Pages
-- Numbers
+- Git Streak
 - Keynote
+- Numbers
+- Pages
+- RAR Extractor Lite
 - Slack
+- SortingMatters
+- Telegram
 
 ## Dock Pinned Applications
 

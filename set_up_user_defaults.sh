@@ -93,7 +93,7 @@ defaults write -g NSUserKeyEquivalents -dict-add "Strikethrough" "@\$x"
 defaults write com.github.atom NSUserKeyEquivalents -dict-add "Auto Indent" "^i"
 
 # Add keyboard shortcut `ctrl + shift + i` to Sort Selected Lines
-# (requires installing https://github.com/FranciscoAmado/Sortify/)
+# (requires SortingMatters https://apps.apple.com/us/app/sortingmatters/id1556795117?mt=12)
 defaults write com.apple.dt.Xcode NSUserKeyEquivalents -dict-add "Sort Selected Lines" "^\$i"
 
 ################################################################################
@@ -101,7 +101,10 @@ defaults write com.apple.dt.Xcode NSUserKeyEquivalents -dict-add "Sort Selected 
 ################################################################################
 
 # Move the spotlight bar to the top right corner of the screen
-defaults write com.apple.Spotlight lastWindowPosition -string "{{987, 585}, {680, 430}}"
+defaults write com.apple.Spotlight lastWindowPosition -string "{{984, 950}, {680, 52}}"
+defaults write com.apple.Spotlight userHasMovedWindow -bool true
+# Skip showing the "learn more" tutorial
+defaults write com.apple.Spotlight showedLearnMore -bool true
 
 ################################################################################
 # Trackpad                                                                     #
@@ -109,6 +112,9 @@ defaults write com.apple.Spotlight lastWindowPosition -string "{{987, 585}, {680
 
 # Trackpad: enable tap to click for this user and for the login screen
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerHorizSwipeGesture -int 1
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerVertSwipeGesture -int 1
 
@@ -148,6 +154,16 @@ defaults write -g com.apple.trackpad.scaling -float 2.5
 # Top right screen corner → Desktop
 defaults write com.apple.dock wvous-br-corner -int 4
 defaults write com.apple.dock wvous-br-modifier -int 0
+
+################################################################################
+# Touch Bar                                                                    #
+################################################################################
+
+# Set the touch bar to be a fixed control strip
+defaults write com.apple.touchbar.agent PresentationModeGlobal -string "fullControlStrip"
+
+# Configure which controls will be shown on the strip
+defaults write com.apple.controlstrip FullCustomized -array "com.apple.system.group.brightness" "com.apple.system.screen-lock" "NSTouchBarItemIdentifierFlexibleSpace" "com.apple.system.group.media" "com.apple.system.group.volume"
 
 ################################################################################
 # Language & Region                                                            #
@@ -407,6 +423,11 @@ defaults write com.apple.dt.Xcode IDEIndexerActivityShowNumericProgress -bool YE
 # Enable project build time
 defaults write com.apple.dt.Xcode ShowBuildOperationDuration -bool YES
 
+defaults write com.apple.dt.Xcode IDEEditorCoordinatorTarget_DoubleClick -string "SameAsClick"
+defaults write com.apple.dt.Xcode IDEEditorNavigationStyle_DefaultsKey -string "IDEEditorNavigationStyle_OpenInPlace"
+defaults write com.apple.dt.Xcode IDEIssueNavigatorDetailLevel -int 4
+defaults write com.apple.dt.Xcode IDESearchNavigatorDetailLevel -int 4
+
 ################################################################################
 # SourceTree                                                                   #
 ################################################################################
@@ -420,6 +441,38 @@ defaults write com.torusknot.SourceTreeNotMAS diffSkipFilePatterns -string "*.pb
 
 # Sets the GPG binary location
 defaults write com.torusknot.SourceTreeNotMAS gpgProgram -string "/usr/local/MacGPG2/bin"
+
+defaults write com.torusknot.SourceTreeNotMAS fileStatusStagingViewMode -int 1
+defaults write com.torusknot.SourceTreeNotMAS fileStatusViewMode2 -int 0
+# Skip tutorials
+defaults write com.torusknot.SourceTreeNotMAS showStagingTip -bool false
+defaults write com.torusknot.SourceTreeNotMAS DidShowGettingStarted -bool true
+# Enable Dark Mode
+defaults write com.torusknot.SourceTreeNotMAS currentTheme -int 1
+# Don't restore windows on startup
+defaults write com.torusknot.SourceTreeNotMAS windowRestorationMethod -int 1
+# Use fixed-width font for commit messages
+defaults write com.torusknot.SourceTreeNotMAS useFixedWithCommitFont -bool true
+# Display column guide in commit message at character: 50
+defaults write com.torusknot.SourceTreeNotMAS commitColumnGuideWidth -int 50
+# Keep bookmarks closed on startup
+defaults write com.torusknot.SourceTreeNotMAS bookmarksClosedOnStartup -bool true
+# Ask to bookmark upon opening new repo
+defaults write com.torusknot.SourceTreeNotMAS bookmarksWindowOpen -bool false
+
+################################################################################
+# Telegram                                                                     #
+################################################################################
+
+defaults write ru.keepcoder.Telegram NSNavLastRootDirectory -string "~/Downloads"
+defaults write ru.keepcoder.Telegram kForceTouchAction -int 1
+defaults write ru.keepcoder.Telegram kAutomaticConvertEmojiesType2 -bool true
+
+################################################################################
+# MagicPrefs                                                                   #
+################################################################################
+
+defaults write com.vladalexa.MagicPrefs noMenubarIcon -bool true
 
 ################################################################################
 # Finish                                                                       #
