@@ -4,9 +4,6 @@
 ### Configure System-Wide Aliases
 ################################################################################
 
-# Tellus
-alias tellus="open /Users/rogerluan/Documents/Projects/tellus-ios/zilly.xcworkspace"
-
 # See https://hub.github.com/hub-sync.1.html
 function tellus-sync() {
   for dir in $HOME/Documents/Projects/tellus*; do
@@ -31,9 +28,7 @@ function s() {
 		tellus-sync
     echo "hub sync on fastlane/fastlane"
     (
-      cd $HOME/Documents/Projects/fastlane &&
-      hub_sync_results=$(hub sync 2>&1)
-      swift $DOTFILES_DIR/Utilities/delete_local_branches_from_hub_sync.swift "$hub_sync_results"
+      cd $HOME/Documents/Projects/fastlane && hs
     )
 	else
     echo "hub sync on $PARAM"
@@ -48,13 +43,16 @@ function sourcetree() {
   open -a Sourcetree "$1"
 }
 
+alias st=sourcetree
+
 function doit() {
   sourcetree "$1"
   txt "$1"
 }
 
 function txt() {
-  "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" "$1"
+  code "$1"
+  # "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" "$1"
 }
 
 # This command kills and relaunches several audio and bluetooth related processes,
@@ -85,7 +83,26 @@ alias killgpg="pkill gpg-agent && gpg-agent --daemon"
 # Opens the Google Play Store console (beta view), ready to publish a new version of the app
 alias playstore="open -a safari https://play.google.com/console/u/1/developers/6280656057399977520/app-list"
 
+# Generates a UUID
 alias uuid=uuidgen
+
+# Alias to hub_patched_sync
+alias hs=hub_patched_sync
+
+# Attempts to clean up local branches once they don't exist in remote anymore
+function hub_patched_sync() {
+  hub_sync_results=$(hub sync 2>&1)
+  swift $DOTFILES_DIR/Utilities/delete_local_branches_from_hub_sync.swift "$hub_sync_results"
+}
+
+# Prettifies the input json file into an output file
+function json() {
+  SRC="$1"
+  SRC_FILENAME="${SRC%%.*}" # Removes the .json extension
+  DST="$SRC_FILENAME-prettier.json"
+  cat $SRC | python -mjson.tool > $DST
+  echo "Prettified JSON and saved it at '$DST'"
+}
 
 # Generates a git changelog from the current directory from the parameter's tag to current HEAD.
 function changelog() {

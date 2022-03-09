@@ -75,6 +75,13 @@ fi
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
 
+# https://zsh.sourceforge.io/Doc/Release/Options.html#index-NOMATCH
+# https://thoughtbot.com/blog/how-to-use-arguments-in-a-rake-task
+unsetopt nomatch
+
+# Set up fnm
+eval "$(fnm env --use-on-cd)"
+
 ################################################################################
 # Exports
 ################################################################################
