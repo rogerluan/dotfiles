@@ -5,8 +5,10 @@ export PATH="$HOME/.rbenv/bin:$PATH"
 # Enable use of `gmake` aliased as `make`
 export PATH="/usr/local/opt/make/libexec/gnubin:$PATH"
 
-# Adds Homebrew to PATH
-eval "$(/opt/homebrew/bin/brew shellenv)"
+# Adds Homebrew to PATH on M1 machines
+if [[ $APPLE_SILICON = "true" ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
 
 # llvm
 export PATH="/usr/local/opt/llvm/bin:$PATH"

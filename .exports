@@ -22,7 +22,9 @@ export MAGICK_HOME=/usr/local/Cellar/imagemagick@6/6.9.11-28/
 
 export THEOS=~/theos
 
-export APPLE_SILICON=true
+if [[ $(arch) == 'arm64' ]]; then
+  export APPLE_SILICON=true
+fi
 
 export NVM_DIR="$HOME/.nvm"
 
