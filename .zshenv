@@ -1,1 +1,1 @@
-source $HOME/.paths
+# source $HOME/.paths
