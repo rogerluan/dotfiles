@@ -110,3 +110,30 @@ function json() {
 function changelog() {
   git log --pretty='* %s' "$1"...HEAD | grep "* #"
 }
+
+# Generates a git changelog from the current directory from the parameter's tag to current HEAD.
+function changelog-md() {
+  CHANGELOG=$(changelog $1)
+  # OPEN_PRS=$(gh pr list)
+
+  sed -E 's/#(\d*)/[#$1](https:\/\/github.com\/zillyinc\/tellus-ios\/pull\/$1)/gm' <<< $CHANGELOG
+
+  # sed -Ei "s/^([[:blank:]]*)(pod 'Reveal-SDK')/\1# \2/" Podfile
+}
+
+alias cl=changelog
+alias clmd=changelog-md
+
+alias path="tr ':' '\n' <<< \"$PATH\""
+
+function sha256() {
+  set +H
+  echo -n "$1" | openssl dgst -sha256
+  set -h
+}
+
+function md5() {
+  set +H
+  echo -n "$1" | openssl dgst -md5
+  set -h
+}
