@@ -51,8 +51,10 @@ function doit() {
 }
 
 function txt() {
-  code "$1"
+  # Sublime Text
   # "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" "$1"
+  # VS Code
+  code $1
 }
 
 # This command kills and relaunches several audio and bluetooth related processes,
