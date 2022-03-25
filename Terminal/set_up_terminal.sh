@@ -24,12 +24,12 @@ rm -rf fonts
 # Install powerline-shell
 git clone git@github.com:b-ryan/powerline-shell.git --depth=1
 cd powerline-shell
-python setup.py install --user
+python3 setup.py install --user
 cd ..
 rm -rf powerline-shell
 
 # Open my custom Solarized Dark theme to apply it on Terminal
-open $DIR/Solarized\ Dark.terminal
+open $DIR/Terminal/Solarized\ Dark.terminal
 
 # Make this theme the default one
 defaults write com.apple.Terminal "Default Window Settings" -string "Solarized Dark"

@@ -97,6 +97,8 @@ function hub_patched_sync() {
   swift $DOTFILES_DIR/Utilities/delete_local_branches_from_hub_sync.swift "$hub_sync_results"
 }
 
+alias python=python3
+
 # Prettifies the input json file into an output file
 function json() {
   SRC="$1"

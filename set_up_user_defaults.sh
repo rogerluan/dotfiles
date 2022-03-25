@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# TODO:
+# - MagicPrefs 3 finger click mapping to middle button
+# - Telegram settings
+# - Which icons shows on menu bar (sound, wifi, bluetooth)
+
 ################################################################################
 ### Configure macOS's helpful UserDefaults (aka simply `defaults`)
 ################################################################################
