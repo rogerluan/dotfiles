@@ -4,6 +4,7 @@
 # - MagicPrefs 3 finger click mapping to middle button
 # - Telegram settings
 # - Which icons shows on menu bar (sound, wifi, bluetooth)
+# - Toggl
 
 ################################################################################
 ### Configure macOS's helpful UserDefaults (aka simply `defaults`)
