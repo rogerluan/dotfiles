@@ -13,13 +13,9 @@ HYPHEN_INSENSITIVE="true"
 # much, much faster.
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-HIST_STAMPS="dd/mm/yyyy"
+# Format to display history timestamps
+# See 'man strftime' for details.
+HIST_STAMPS="%Y/%m/%d %k:%M"
 
 # Plugins
 # Standard plugins can be found in ~/.oh-my-zsh/plugins/*
