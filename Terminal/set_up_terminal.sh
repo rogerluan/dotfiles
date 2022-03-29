@@ -29,7 +29,7 @@ cd ..
 rm -rf powerline-shell
 
 # Open my custom Solarized Dark theme to apply it on Terminal
-open $DIR/Terminal/Solarized\ Dark.terminal
+open $DIR/Solarized\ Dark.terminal
 
 # Make this theme the default one
 defaults write com.apple.Terminal "Default Window Settings" -string "Solarized Dark"
