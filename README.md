@@ -44,11 +44,10 @@ dependencies that could manage their installation.
 
 ## Direct Download
 
-- Android Studio https://developer.android.com/studio   
 - Charles https://www.charlesproxy.com/download/
 - ExpressVPN https://www.expressvpn.com/setup
 - Figma https://www.figma.com/download/desktop/mac
-- Google Chrome https://www.google.com/chrome/
+- Firefox https://www.mozilla.org/en-US/firefox/new/
 - GPG Suite https://gpgtools.org
 - Insomnia https://insomnia.rest
 - Jumpshare https://jumpshare.com/downloading
@@ -59,9 +58,9 @@ dependencies that could manage their installation.
 - SizeUp http://www.irradiatedsoftware.com/sizeup/
 - SourceTree https://www.sourcetreeapp.com
 - Spotify https://www.spotify.com/br/download/mac/
-- Sublime Text (sync settings via `Sync Settings` package)
 - TinyPNG4Mac https://github.com/kyleduo/TinyPNG4Mac
 - Toggl https://toggl.github.io/toggldesktop/download/macos-stable/
+- Visual Studio Code https://code.visualstudio.com/download
 - VLC https://www.videolan.org/vlc/
 - WhatsApp https://www.whatsapp.com/download/
 - Xcode - Install all the version needed via [xcode-install](https://github.com/xcpretty/xcode-install)
@@ -71,6 +70,7 @@ dependencies that could manage their installation.
 
 - AdBlock
 - AdBlock Plus
+- Bitwarden
 - Git Streak
 - Keynote
 - Numbers
@@ -84,11 +84,11 @@ dependencies that could manage their installation.
 
 - Finder
 - Safari
-- Notes
 - Xcode
 - Slack
 - Telegram
 - SourceTree
+- Visual Studio Code
 - Toggl
 - Spotify
 

@@ -5,6 +5,12 @@
 # - Telegram settings
 # - Which icons shows on menu bar (sound, wifi, bluetooth)
 # - Toggl
+# - Zoom
+# - Set up the Side Bar with the right apps
+# - Set up Finder side menu folders (remove tags, add all the folders)
+# - Set up the gesture where drag down 3 windows to open all related windows
+# - Show bluetooth on status bar
+# - Show sound on status bar **ALWAYS**
 
 ################################################################################
 ### Configure macOS's helpful UserDefaults (aka simply `defaults`)
