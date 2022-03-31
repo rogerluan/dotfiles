@@ -11,6 +11,7 @@
 # - Set up the gesture where drag down 3 windows to open all related windows
 # - Show bluetooth on status bar
 # - Show sound on status bar **ALWAYS**
+# - Safari "Safari Opens With all windows from last session", "New windows open with empty page" "new tabs open with empty page"
 
 ################################################################################
 ### Configure macOS's helpful UserDefaults (aka simply `defaults`)
