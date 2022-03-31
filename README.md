@@ -55,6 +55,7 @@ dependencies that could manage their installation.
 - MagicPrefs http://magicprefs.com/MagicPrefs.app.zip
 - Popcorn Time https://popcorntime.sh
 - RescueTime https://www.rescuetime.com/get_rescuetime
+- SF Symbols https://developer.apple.com/sf-symbols/
 - SizeUp http://www.irradiatedsoftware.com/sizeup/
 - SourceTree https://www.sourcetreeapp.com
 - Spotify https://www.spotify.com/br/download/mac/
