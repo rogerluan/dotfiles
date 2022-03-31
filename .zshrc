@@ -31,7 +31,9 @@ plugins=(
 # See https://github.com/ohmyzsh/ohmyzsh/issues/6835#issuecomment-390216875
 ZSH_DISABLE_COMPFIX=true
 
-source $ZSH/oh-my-zsh.sh
+if [ -f $ZSH/oh-my-zsh.sh ]; then
+  source $ZSH/oh-my-zsh.sh
+fi
 
 ################################################################################
 # User configuration
@@ -46,7 +48,9 @@ fi
 
 # Run Powerline Shell
 function powerline_precmd() {
-  PS1="$(powerline-shell --shell zsh $?)"
+  if which powerline-shell > /dev/null; then
+    PS1="$(powerline-shell --shell zsh $?)"
+  fi
 }
 
 function install_powerline_precmd() {
@@ -73,7 +77,9 @@ fi
 
 # https://zsh.sourceforge.io/Doc/Release/Options.html#index-NOMATCH
 # https://thoughtbot.com/blog/how-to-use-arguments-in-a-rake-task
-unsetopt nomatch
+if which unsetopt > /dev/null; then
+  unsetopt nomatch
+fi
 
 # Set up fnm
 # eval "$(fnm env --use-on-cd)"
