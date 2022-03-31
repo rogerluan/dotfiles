@@ -12,6 +12,8 @@ echo " * Installing Homebrew"
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 echo " * Homebrew installed successfully!"
 
+source ~/.zshrc
+
 # rbenv - https://github.com/rbenv/rbenv
 echo " * Installing rbenv and ruby-build"
 brew install rbenv ruby-build

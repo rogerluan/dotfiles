@@ -6,7 +6,6 @@
 
 source .exports
 source set_up_symlinks.sh
-source ~/.zshrc
 source set_up_dependencies.sh
 source set_up_commit_signing.sh
 source set_up_encrypted_resources.sh $1
