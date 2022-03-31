@@ -1,5 +1,5 @@
 # TODO: Make this python path dynamic. Python path is needed to make powerline-shell work properly.
-export PATH="$HOME/Library/Python/3.9/bin:$PATH"
+export PATH="$HOME/Library/Python/3.8/bin:$PATH"
 export PATH="$HOME/.rbenv/shims:$PATH"
 export PATH="$HOME/.rbenv/bin:$PATH"
 
