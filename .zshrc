@@ -17,6 +17,10 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # See 'man strftime' for details.
 HIST_STAMPS="%Y/%m/%d %k:%M"
 
+# oh-my-zsh seems to enable this by default, not desired for
+# workflow of controlling terminal title.
+DISABLE_AUTO_TITLE="true"
+
 # Plugins
 # Standard plugins can be found in ~/.oh-my-zsh/plugins/*
 # Add wisely, as too many plugins slow down shell startup.
