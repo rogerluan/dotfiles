@@ -11,7 +11,17 @@
 # - Set up the gesture where drag down 3 windows to open all related windows
 # - Show bluetooth on status bar
 # - Show sound on status bar **ALWAYS**
-# - Safari "Safari Opens With all windows from last session", "New windows open with empty page" "new tabs open with empty page"
+# - Safari:
+#    "Safari Opens With all windows from last session"
+#    "New windows open with empty page"
+#    "new tabs open with empty page"
+#    "Show full website"
+#    Remove history manually
+#    Show develop menu in menu bar
+#    untick using information from my contacts
+# - Xcode navigator size small, general tab
+# - Show battery percentage in menu bar
+# - Hide the Now Playing in menu bar
 
 ################################################################################
 ### Configure macOS's helpful UserDefaults (aka simply `defaults`)
