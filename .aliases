@@ -139,3 +139,5 @@ function md5() {
   echo -n "$1" | openssl dgst -md5
   set -h
 }
+
+alias giturl="git config --get remote.origin.url"
