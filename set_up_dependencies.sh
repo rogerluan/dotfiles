@@ -49,3 +49,7 @@ echo " * Make updated successfully!"
 echo " * Installing BitBar"
 brew install bitbar
 echo " * BitBar installed successfully!"
+
+echo " * Installing xcbeautify"
+brew install xcbeautify
+echo " * xcbeautify installed successfully!"
