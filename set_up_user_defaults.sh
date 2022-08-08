@@ -9,8 +9,11 @@
 # - Set up the Side Bar with the right apps
 # - Set up Finder side menu folders (remove tags, add all the folders)
 # - Set up the gesture where drag down 3 windows to open all related windows
-# - Show bluetooth on status bar
-# - Show sound on status bar **ALWAYS**
+# - Menu Bar:
+#     - Show bluetooth on status bar always
+#     - Show sound on status bar **ALWAYS**
+#     - Show battery percentage in menu bar
+#     - Hide the Now Playing in menu bar
 # - Safari:
 #    "Safari Opens With all windows from last session"
 #    "New windows open with empty page"
@@ -20,8 +23,6 @@
 #    Show develop menu in menu bar
 #    untick using information from my contacts
 # - Xcode navigator size small, general tab
-# - Show battery percentage in menu bar
-# - Hide the Now Playing in menu bar
 
 ################################################################################
 ### Configure macOS's helpful UserDefaults (aka simply `defaults`)
