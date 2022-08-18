@@ -65,7 +65,7 @@ dependencies that could manage their installation.
 - VLC https://www.videolan.org/vlc/
 - WhatsApp https://www.whatsapp.com/download/
 - Xcode - Install all the version needed via [xcode-install](https://github.com/xcpretty/xcode-install)
-- Zoom https://zoom.us/client/latest/zoomusInstaller.pkg
+- Zoom https://zoom.us/client/latest/zoomusInstallerFull.pkg?archType=arm64
 
 ## App Store
 
@@ -80,6 +80,7 @@ dependencies that could manage their installation.
 - Slack
 - SortingMatters
 - Telegram
+- Trello
 
 ## Dock Pinned Applications
 
