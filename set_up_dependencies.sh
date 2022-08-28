@@ -14,42 +14,17 @@ echo " * Homebrew installed successfully!"
 
 source ~/.zshrc
 
-# rbenv - https://github.com/rbenv/rbenv
-echo " * Installing rbenv and ruby-build"
-brew install rbenv ruby-build
-echo " * rbenv installed successfully!"
-
 # Ruby - https://www.ruby-lang.org/en/
-echo " * Installing Ruby 2.7.5"
-rbenv install 2.7.5
-rbenv global 2.7.5
-echo " * Ruby 2.7.5 installed successfully!"
+RUBY_VERSION="3.1.1"
+echo " * Installing Ruby $RUBY_VERSION"
+rbenv install $RUBY_VERSION
+rbenv global $RUBY_VERSION
+echo " * Ruby $RUBY_VERSION installed successfully!"
 
-# hub - https://hub.github.com
-echo " * Installing hub"
-brew install hub
-echo " * hub installed successfully!"
+# Installs all dependencies declared in Brewfile
+brew bundle install
 
 # xcode-install - https://github.com/xcpretty/xcode-install
 echo " * Installing xcode-install"
 gem install xcode-install
 echo " * xcode-install installed successfully!"
-
-# Heroku - https://devcenter.heroku.com/articles/heroku-cli
-echo " * Installing Heroku"
-brew tap heroku/brew
-brew install heroku
-echo " * Heroku installed successfully!"
-
-# Make - https://www.gnu.org/software/make/manual/make.html
-echo " * Updating Make"
-brew install make
-echo " * Make updated successfully!"
-
-echo " * Installing BitBar"
-brew install bitbar
-echo " * BitBar installed successfully!"
-
-echo " * Installing xcbeautify"
-brew install xcbeautify
-echo " * xcbeautify installed successfully!"
