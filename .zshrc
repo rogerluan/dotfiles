@@ -105,4 +105,9 @@ source "$HOME/.aliases"
 # Secrets
 ################################################################################
 
-source "$HOME/.secrets"
+SECRETS_FILE="$HOME/.secrets"
+if [ -f $SECRETS_FILE ]; then
+  source $SECRETS_FILE
+else
+  echo "Warning: '$SECRETS_FILE' doesn't exist yet so it wasn't sourced."
+fi
