@@ -208,7 +208,7 @@ MD044:
     fastlane,
   ]
   # Include code blocks
-  code_blocks: true
+  code_blocks: false
   # Include HTML elements
   html_elements: true
 

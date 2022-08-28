@@ -4,23 +4,23 @@ A bundle of all my dotfiles as well as a handful of scripts to help set up macOS
 
 Before doing anything, make sure you know what are you doing! Settings applied by this repository are very personal, and definitely don't suite everyone's needs. I suggest you to create your own set of dotfiles based on this repo.
 
-# Installation Steps
+## Installation Steps
 
 1. Set up SSH keys
 
-```
+```sh
 bash <(curl -s https://raw.githubusercontent.com/rogerluan/dotfiles/master/set_up_ssh_key.sh)
 ```
 
 2. Clone this repo into ~/.dotfiles
 
-```
+```sh
 git clone git@github.com:rogerluan/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 ./_set_up.sh
 ```
 
-# What Terminal is Roger using
+## What Terminal is Roger using
 
 <img src="Assets/Terminal.png" width="500">
 
@@ -36,13 +36,13 @@ Since every time I post a screenshot of my Terminal I get asked what Terminal I 
 - Terminal Preferences → Profiles → Keyboard → "Use `Option` as Meta key", to allow deleting entire words using `Option + Delete` (thanks to [@bruno_hcr](https://twitter.com/bruno_hcr)!)
 - For other configurations check out [set_up_terminal.sh](/Terminal/set_up_terminal.sh)
 
-# Apps
+## Apps
 
 I still install all these apps in the old fashioned way: via App Store, or via
 the original website, to avoid installing other potentially malicious 3rd party
 dependencies that could manage their installation.
 
-## Direct Download
+### Direct Download
 
 - Charles https://www.charlesproxy.com/download/
 - ExpressVPN https://www.expressvpn.com/setup
@@ -64,10 +64,10 @@ dependencies that could manage their installation.
 - Visual Studio Code https://code.visualstudio.com/download
 - VLC https://www.videolan.org/vlc/
 - WhatsApp https://www.whatsapp.com/download/
-- Xcode - Install all the version needed via [xcode-install](https://github.com/xcpretty/xcode-install)
+- Xcode - Install all the version needed via [`xcode-install`](https://github.com/xcpretty/xcode-install)
 - Zoom https://zoom.us/client/latest/zoomusInstallerFull.pkg?archType=arm64
 
-## App Store
+### App Store
 
 - AdBlock
 - AdBlock Plus
@@ -82,7 +82,7 @@ dependencies that could manage their installation.
 - Telegram
 - Trello
 
-## Dock Pinned Applications
+### Dock Pinned Applications
 
 - Finder
 - Safari
@@ -94,7 +94,7 @@ dependencies that could manage their installation.
 - Toggl
 - Spotify
 
-# Special thanks to…
+## Special thanks to…
 
 What dotfiles is Felix using - https://github.com/KrauseFx/dotfiles - via [@KrauseFx](https://twitter.com/krausefx)
 
