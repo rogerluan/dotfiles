@@ -14,3 +14,4 @@ cask "asset-catalog-tinkerer" # https://github.com/insidegui/AssetCatalogTinkere
 cask "tinypng4mac" # https://github.com/kyleduo/TinyPNG4Mac
 # We might need to install ruby-build also, but unsure.
 # brew "ruby-build" # https://github.com/rbenv/ruby-build
+brew "pyenv"

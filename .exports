@@ -32,3 +32,6 @@ fi
 export NVM_DIR="$HOME/.nvm"
 
 export JAVA_HOME=/Applications/Android\ Studio.app/Contents/jre/Contents/Home
+
+# pyenv root directory. Consumed by pyenv only.
+export PYENV_ROOT="$HOME/.pyenv"

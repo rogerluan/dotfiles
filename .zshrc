@@ -28,6 +28,7 @@ plugins=(
   bundler
   git
   pod
+  pyenv
   z
 )
 
@@ -38,6 +39,13 @@ ZSH_DISABLE_COMPFIX=true
 if [ -f $ZSH/oh-my-zsh.sh ]; then
   source $ZSH/oh-my-zsh.sh
 fi
+
+################################################################################
+# Exports
+################################################################################
+
+source "$HOME/.exports"
+source "$HOME/.paths"
 
 ################################################################################
 # User configuration
@@ -75,6 +83,11 @@ if which rbenv > /dev/null; then
   eval "$(rbenv init -)"
 fi
 
+# Initialize pyenv if it's already installed
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
+
 # Load nvm
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
@@ -87,13 +100,6 @@ fi
 
 # Set up fnm
 # eval "$(fnm env --use-on-cd)"
-
-################################################################################
-# Exports
-################################################################################
-
-source "$HOME/.exports"
-source "$HOME/.paths"
 
 ################################################################################
 # Aliases

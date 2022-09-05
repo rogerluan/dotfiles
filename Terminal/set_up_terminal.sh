@@ -9,6 +9,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 # Prerequisite:
 # - git
 # - git SSH
+# - pyenv installed & running (`which python3` must point to pyenv shims)
 
 # Install oh-my-zsh
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
@@ -24,7 +25,7 @@ rm -rf fonts
 # Install powerline-shell
 git clone git@github.com:b-ryan/powerline-shell.git --depth=1
 cd powerline-shell
-python3 setup.py install --user
+python3 setup.py install # Note that this must be run only after pyenv has already been installed and is
 cd ..
 rm -rf powerline-shell
 
