@@ -141,3 +141,8 @@ function md5() {
 }
 
 alias giturl="git config --get remote.origin.url"
+
+# Prints the incoming argument backwards
+function reverse() {
+  awk 'BEGIN{FS=""} {for (i=NF; i>0; i--) s=s $i; print s}' <<< "$1"
+}
