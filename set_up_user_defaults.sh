@@ -499,6 +499,13 @@ defaults write ru.keepcoder.Telegram kAutomaticConvertEmojiesType2 -bool true
 defaults write com.vladalexa.MagicPrefs noMenubarIcon -bool true
 
 ################################################################################
+# Git                                                                          #
+################################################################################
+
+# Enable ".localizablestrings" files to be git-diff'd as text files (e.g. in SourceTree)
+git config --global --add diff.localizablestrings.textconv "iconv -f utf-16 -t utf-8"
+
+################################################################################
 # Finish                                                                       #
 ################################################################################
 
