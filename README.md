@@ -64,7 +64,7 @@ dependencies that could manage their installation.
 - Visual Studio Code https://code.visualstudio.com/download
 - VLC https://www.videolan.org/vlc/
 - WhatsApp https://www.whatsapp.com/download/
-- Xcode - Install all the version needed via [`xcode-install`](https://github.com/xcpretty/xcode-install)
+- Xcode - Install all the version needed via [`xcodes`](https://github.com/RobotsAndPencils/xcodes)
 - Zoom https://zoom.us/client/latest/zoomusInstallerFull.pkg?archType=arm64
 
 ### App Store

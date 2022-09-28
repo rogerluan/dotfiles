@@ -22,9 +22,4 @@ rbenv global $RUBY_VERSION
 echo " * Ruby $RUBY_VERSION installed successfully!"
 
 # Installs all dependencies declared in Brewfile
-brew bundle install
-
-# xcode-install - https://github.com/xcpretty/xcode-install
-echo " * Installing xcode-install"
-gem install xcode-install
-echo " * xcode-install installed successfully!"
+brew bundle
