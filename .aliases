@@ -126,6 +126,7 @@ function changelog-md() {
 alias cl=changelog
 alias clmd=changelog-md
 
+# Prints the PATH env var in a user-friendly way
 alias path="tr ':' '\n' <<< \"$PATH\""
 
 function sha256() {
