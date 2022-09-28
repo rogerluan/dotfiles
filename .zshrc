@@ -22,6 +22,12 @@ HIST_STAMPS="%Y/%m/%d %k:%M"
 DISABLE_AUTO_TITLE="true"
 
 # Plugins
+
+BUNDLED_COMMANDS=(
+  rubocop
+  fastlane
+)
+
 # Standard plugins can be found in ~/.oh-my-zsh/plugins/*
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
