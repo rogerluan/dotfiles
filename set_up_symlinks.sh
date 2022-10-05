@@ -16,6 +16,7 @@ ln -s $DOTFILES_DIR/.aliases $HOME/.aliases
 ln -s $DOTFILES_DIR/.exports $HOME/.exports
 ln -s $DOTFILES_DIR/.paths $HOME/.paths
 ln -s $DOTFILES_DIR/.markdownlintrc $HOME/.markdownlintrc
+ln -s $DOTFILES_DIR/.ruby-version $HOME/.ruby-version
 
 # TODO: We might not need this, this is why it's commented out. After going through the setup
 # steps in a new machine, check if the powerline shell utility works out of the box. If so,

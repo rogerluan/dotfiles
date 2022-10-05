@@ -15,9 +15,10 @@ echo " * Homebrew installed successfully!"
 source ~/.zshrc
 
 # Ruby - https://www.ruby-lang.org/en/
-RUBY_VERSION="3.1.1"
-echo " * Installing Ruby $RUBY_VERSION"
-rbenv install $RUBY_VERSION
+echo " * Installing Ruby"
+# Will pick up version from ~/.ruby-version
+RUBY_VERSION="$(cat ~/.ruby-version)"
+rbenv install
 rbenv global $RUBY_VERSION
 echo " * Ruby $RUBY_VERSION installed successfully!"
 
