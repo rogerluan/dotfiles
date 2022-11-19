@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # TODO:
-# - MagicPrefs 3 finger click mapping to middle button
 # - Telegram settings
 # - Which icons shows on menu bar (sound, wifi, bluetooth)
 # - Toggl
@@ -493,10 +492,11 @@ defaults write ru.keepcoder.Telegram kForceTouchAction -int 1
 defaults write ru.keepcoder.Telegram kAutomaticConvertEmojiesType2 -bool true
 
 ################################################################################
-# MagicPrefs                                                                   #
+# MiddleClick                                                                   #
 ################################################################################
 
-defaults write com.vladalexa.MagicPrefs noMenubarIcon -bool true
+osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/MiddleClick.app", hidden:true}'
+defaults write com.rouge41.middleClick autoRestartOnWake -int 3
 
 ################################################################################
 # Git                                                                          #

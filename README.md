@@ -44,16 +44,15 @@ dependencies that could manage their installation.
 
 ### Direct Download
 
-- Charles https://www.charlesproxy.com/download/
 - ExpressVPN https://www.expressvpn.com/setup
 - Figma https://www.figma.com/download/desktop/mac
 - Firefox https://www.mozilla.org/en-US/firefox/new/
 - GPG Suite https://gpgtools.org
 - Insomnia https://insomnia.rest
-- Jumpshare https://jumpshare.com/downloading
 - LSUnusedResources https://github.com/tinymind/LSUnusedResources
-- MagicPrefs http://magicprefs.com/MagicPrefs.app.zip
+- MiddleClick https://github.com/artginzburg/MiddleClick-BigSur
 - Popcorn Time https://popcorntime.sh
+- Proxyman https://proxyman.io
 - RescueTime https://www.rescuetime.com/get_rescuetime
 - SF Symbols https://developer.apple.com/sf-symbols/
 - SizeUp http://www.irradiatedsoftware.com/sizeup/
@@ -93,6 +92,7 @@ dependencies that could manage their installation.
 - Visual Studio Code
 - Toggl
 - Spotify
+- Terminal
 
 ## Special thanks to…
 

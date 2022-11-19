@@ -16,3 +16,7 @@ brew "swiftformat" # https://github.com/nicklockwood/SwiftFormat
 brew "xcbeautify" # https://github.com/tuist/xcbeautify
 cask "asset-catalog-tinkerer" # https://github.com/insidegui/AssetCatalogTinkerer
 cask "tinypng4mac" # https://github.com/kyleduo/TinyPNG4Mac
+brew "aria2"
+
+
+# brew install --cask --no-quarantine middleclick
