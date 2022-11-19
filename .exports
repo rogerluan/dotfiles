@@ -35,3 +35,6 @@ export JAVA_HOME=/Applications/Android\ Studio.app/Contents/jre/Contents/Home
 
 # pyenv root directory. Consumed by pyenv only.
 export PYENV_ROOT="$HOME/.pyenv"
+
+# Consumed by fastlane, which avoids printing the plugins table on every lane run
+export FASTLANE_HIDE_PLUGINS_TABLE=true
