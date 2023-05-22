@@ -148,3 +148,9 @@ alias giturl="git config --get remote.origin.url"
 function reverse() {
   awk 'BEGIN{FS=""} {for (i=NF; i>0; i--) s=s $i; print s}' <<< "$1"
 }
+
+# Converts time from a "hour:minute:second" format to decimal.
+function time_to_d() {
+  ruby $DOTFILES_DIR/Utilities/time_to_decimal.rb "$1"
+}
+
