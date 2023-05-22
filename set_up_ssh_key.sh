@@ -18,10 +18,10 @@ function toClipboard {
 }
 
 # Generate new SSH key
-echo -n "Plese enter the email you'd like to register with your GitHub SSH key: "
+echo -n "Please enter the email you'd like to register with your GitHub SSH key: "
 read email
 echo "Next, press enter. Then create a memorable passphrase"
-ssh-keygen -t rsa -b 4096 -C $email
+ssh-keygen -t rsa -b 4096 -C "$email"
 
 # Add your SSH key to the ssh-agent
 # Start the ssh-agent in the background
