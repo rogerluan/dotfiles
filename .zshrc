@@ -35,6 +35,7 @@ plugins=(
   git
   pod
   pyenv
+  rails
   z
 )
 
