@@ -73,6 +73,7 @@ dependencies that could manage their installation.
 - Bitwarden
 - Git Streak
 - Keynote
+- NewFileMenuFree
 - Numbers
 - Pages
 - RAR Extractor Lite
