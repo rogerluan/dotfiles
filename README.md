@@ -60,7 +60,6 @@ dependencies that could manage their installation.
 - SourceTree https://www.sourcetreeapp.com
 - Spotify https://www.spotify.com/br/download/mac/
 - TinyPNG4Mac https://github.com/kyleduo/TinyPNG4Mac
-- Toggl https://toggl.github.io/toggldesktop/download/macos-stable/
 - Visual Studio Code https://code.visualstudio.com/download
 - VLC https://www.videolan.org/vlc/
 - WhatsApp https://www.whatsapp.com/download/
@@ -80,6 +79,7 @@ dependencies that could manage their installation.
 - Slack
 - SortingMatters
 - Telegram
+- Toggl
 - Trello
 
 ### Dock Pinned Applications
