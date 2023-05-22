@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # TODO:
-# - MagicPrefs 3 finger click mapping to middle button
 # - Telegram settings
 # - Which icons shows on menu bar (sound, wifi, bluetooth)
 # - Toggl
@@ -29,7 +28,6 @@
 ################################################################################
 
 # Prerequisite:
-# - Atom
 # - Xcode
 # - SizeUp
 # - SourceTree
@@ -46,7 +44,6 @@ set -x # Logs every command on Terminal
 # overriding settings we’re about to change
 osascript -e 'tell application "System Preferences" to quit'
 osascript -e 'tell app "Xcode" to quit'
-osascript -e 'tell app "Atom" to quit'
 osascript -e 'tell app "SizeUp" to quit'
 osascript -e 'tell app "SourceTree" to quit'
 
@@ -112,9 +109,6 @@ defaults write -g NSUserKeyEquivalents -dict-add "Show Previous Tab" "@~\\U2190"
 
 # Add keyboard shortcut `⌘ + shift + x` to strikethrough the currently selected text, globally.
 defaults write -g NSUserKeyEquivalents -dict-add "Strikethrough" "@\$x"
-
-# Add keyboard shortcut `ctrl + i` to Auto Indent
-defaults write com.github.atom NSUserKeyEquivalents -dict-add "Auto Indent" "^i"
 
 # Add keyboard shortcut `ctrl + shift + i` to Sort Selected Lines
 # (requires SortingMatters https://apps.apple.com/us/app/sortingmatters/id1556795117?mt=12)
@@ -493,10 +487,11 @@ defaults write ru.keepcoder.Telegram kForceTouchAction -int 1
 defaults write ru.keepcoder.Telegram kAutomaticConvertEmojiesType2 -bool true
 
 ################################################################################
-# MagicPrefs                                                                   #
+# MiddleClick                                                                   #
 ################################################################################
 
-defaults write com.vladalexa.MagicPrefs noMenubarIcon -bool true
+osascript -e 'tell application "System Events" to make login item at end with properties {path:"/Applications/MiddleClick.app", hidden:true}'
+defaults write com.rouge41.middleClick autoRestartOnWake -int 3
 
 ################################################################################
 # Git                                                                          #

@@ -17,6 +17,8 @@ ln -s $DOTFILES_DIR/.paths $HOME/.paths
 ln -s $DOTFILES_DIR/.ruby-version $HOME/.ruby-version
 ln -s $DOTFILES_DIR/.zshenv $HOME/.zshenv
 ln -s $DOTFILES_DIR/.zshrc $HOME/.zshrc
+ln -s $DOTFILES_DIR/.python-version $HOME/.python-version
+
 
 # TODO: We might not need this, this is why it's commented out. After going through the setup
 # steps in a new machine, check if the powerline shell utility works out of the box. If so,

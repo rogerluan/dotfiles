@@ -17,3 +17,5 @@ brew "xcbeautify" # https://github.com/tuist/xcbeautify
 cask "asset-catalog-tinkerer" # https://github.com/insidegui/AssetCatalogTinkerer
 cask "tinypng4mac" # https://github.com/kyleduo/TinyPNG4Mac
 cask "copilot-for-xcode" # https://github.com/intitni/CopilotForXcode
+brew "aria2"
+brew install --cask --no-quarantine middleclick
