@@ -18,4 +18,4 @@ cask "asset-catalog-tinkerer" # https://github.com/insidegui/AssetCatalogTinkere
 cask "tinypng4mac" # https://github.com/kyleduo/TinyPNG4Mac
 cask "copilot-for-xcode" # https://github.com/intitni/CopilotForXcode
 brew "aria2"
-brew install --cask --no-quarantine middleclick
+# brew install --cask --no-quarantine middleclick # Temp commented out because it's broken.
