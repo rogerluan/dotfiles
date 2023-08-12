@@ -1,5 +1,7 @@
 # Roger's dotfiles
 
+<img src="https://views.whatilearened.today/views/github/rogerluan/dotfiles.svg">
+
 A bundle of all my dotfiles as well as a handful of scripts to help set up macOS from scratch.
 
 Before doing anything, make sure you know what are you doing! Settings applied by this repository are very personal, and definitely don't suite everyone's needs. I suggest you to create your own set of dotfiles based on this repo.
