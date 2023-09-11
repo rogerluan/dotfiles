@@ -108,3 +108,13 @@ Change macOS User Preferences via Command Line - https://pawelgrzybek.com/change
 Mathias’s dotfiles - https://github.com/mathiasbynens/dotfiles - via [@mathias](https://twitter.com/mathias)
 
 Moving to zsh, part 2: Configuration Files - https://scriptingosx.com/2019/06/moving-to-zsh-part-2-configuration-files/ - via [@scriptingosx](https://twitter.com/scriptingosx)
+
+# Explore my other tools
+
+<img width="400" alt="Statused Social Banner" src="https://statused.com/assets/social-banner.png">
+
+Forget about 'When did release v2.1.3 go live again?' and 'Is the app ready to be tested yet?'
+
+Statused monitors App Store Connect and send you notifications directly on Slack.
+
+Learn more: [statused.com](https://statused.com?ref=dotfiles)
