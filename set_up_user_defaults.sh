@@ -107,6 +107,9 @@ defaults write -g NSUserKeyEquivalents -dict-add "Show Next Tab" "@~\\U2192"
 # Add keyboard shortcut `⌘ + option + left` to show the previous tab, globally.
 defaults write -g NSUserKeyEquivalents -dict-add "Show Previous Tab" "@~\\U2190"
 
+# Add keyboard shortcut `⌘ + ctrl + shift + s` to export as PDF, globally.
+defaults write -g NSUserKeyEquivalents -dict-add "Export as PDF..." "@^$s"
+
 # Add keyboard shortcut `⌘ + shift + x` to strikethrough the currently selected text, globally.
 defaults write -g NSUserKeyEquivalents -dict-add "Strikethrough" "@\$x"
 

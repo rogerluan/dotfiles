@@ -94,6 +94,9 @@ alias hs=hub_patched_sync
 
 # Attempts to clean up local branches once they don't exist in remote anymore
 function hub_patched_sync() {
+  # First run it once, to sync everything.
+  hub sync
+  # Then run it a second time to collect the branches that weren't deleted, and delete them.
   hub_sync_results=$(hub sync 2>&1)
   swift $DOTFILES_DIR/Utilities/delete_local_branches_from_hub_sync.swift "$hub_sync_results"
 }
@@ -154,5 +157,22 @@ function time_to_d() {
   ruby $DOTFILES_DIR/Utilities/time_to_decimal.rb "$1"
 }
 
+function develop_diff() {
+  git diff develop:"$1" "$1" > "$1".patch
+}
+
+function master_diff() {
+  git diff master:"$1" "$1" > "$1".patch
+}
+
+alias typo="typos --config $DOTFILES_DIR/.typos.toml"
+
+function git_checkout_fork() {
+  ruby $DOTFILES_DIR/Utilities/git_checkout_fork.rb "$@"
+}
+
 alias tinfoil="/Users/rogerluan/Documents/Nintendo\ Switch/infra/TinfoilWebServer --config $DOTFILES_DIR/TinfoilWebServer.config.json"
 
+function rgbtohex() {
+  ruby $DOTFILES_DIR/Utilities/rgb_to_hex.rb "$@"
+}

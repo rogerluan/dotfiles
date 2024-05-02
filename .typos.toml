@@ -1,0 +1,24 @@
+# Reference: https://github.com/crate-ci/typos/blob/master/docs/reference.md
+
+[default]
+extend-ignore-identifiers-re = [
+    "udid|UDID", # UDID stands for Unique Device Identifier, it's a valid acronym.
+    "\\bTLS_[A-Z0-9_]+(_anon_[A-Z0-9_]+)?\\b", # TLS_ is a valid prefix for TLS constants.
+]
+
+[files]
+extend-exclude = [
+    "*.pbxproj",
+    "*.xcscheme",
+    "*.xib",
+    "*.storyboard",
+    "*.plist",
+    "*_FR.json",
+    "fastlane_core/lib/fastlane_core/swag.rb",
+    "**/fixtures/**",
+    "*.xccolortheme",
+    "*.lock",
+    "*.lock.json",
+    "*.terminal",
+    "*.xcresult",
+]
