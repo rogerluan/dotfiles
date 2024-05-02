@@ -110,6 +110,11 @@ if which jenv > /dev/null; then
   eval "$(jenv init -)"
 fi
 
+# Mise - https://mise.jdx.dev
+if which ~/.local/bin/mise > /dev/null; then
+  eval "$(~/.local/bin/mise activate zsh)"
+fi
+
 # Set up fnm
 # eval "$(fnm env --use-on-cd)"
 
