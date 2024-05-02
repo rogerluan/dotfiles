@@ -12,7 +12,7 @@ func shell(_ args: String...) -> Int32 {
     return task.terminationStatus
 }
 
-let pattern = #"warning: '(.*)' was deleted on origin, but appears not merged into 'master'"#
+let pattern = #"warning: '(.*)' was deleted on origin, but appears not merged into '[^']+'"#
 let regex = try! NSRegularExpression(pattern: pattern, options: .anchorsMatchLines)
 let hubSyncOutput = CommandLine.arguments[1]
 let stringRange = NSRange(location: 0, length: hubSyncOutput.utf16.count)
