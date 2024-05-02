@@ -1,0 +1,66 @@
+{
+  "ServedDirectories": [
+    "/Users/rogerluan/Documents/Nintendo Switch/games/switch"
+  ],
+  "StripDirectoryNames": true,
+  "ServeEmptyDirectories": false,
+  "AllowedExt": [
+    "nsp",
+    "nsz",
+    "xci"
+  ],
+  "MessageOfTheDay": "Hello, Roger! Welcome to our own Tinfoil Shop!",
+  "ExtraRepositories": [],
+  "Cache": {
+    "AutoDetectChanges": true,
+    "PeriodicRefreshDelay": "01:00:00"
+  },
+  "Authentication": {
+    "Enabled": false,
+    "WebBrowserAuthEnabled": true,
+    "Users": [
+      {
+        "Name": "JohnDoe",
+        "Pwd": "123456",
+        "MessageOfTheDay": "Hello JohnDoe!",
+        "MaxFingerprints": 1
+      }
+    ]
+  },
+  "FingerprintsFilter": {
+    "Enabled": false
+  },
+  "Blacklist": {
+    "Enabled": false,
+    "FilePath": "blacklist.txt",
+    "MaxConsecutiveFailedAuth": 3,
+    "IsBehindProxy": false
+  },
+  "Kestrel": {
+    "Endpoints": {
+      "Http": {
+        "Url": "http://0.0.0.0:80"
+      }
+    },
+    "Limits": {
+      "MaxConcurrentConnections": 5
+    }
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information"
+    },
+    "Console": {
+      "LogLevel": {
+        "Default": "Information"
+      }
+    },
+    "File": {
+      "Path": "TinfoilWebServer.log",
+      "Append": true,
+      "MinLevel": "Information",
+      "FileSizeLimitBytes": 1000000,
+      "MaxRollingFiles": 10
+    }
+  }
+}

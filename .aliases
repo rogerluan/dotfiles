@@ -154,3 +154,5 @@ function time_to_d() {
   ruby $DOTFILES_DIR/Utilities/time_to_decimal.rb "$1"
 }
 
+alias tinfoil="/Users/rogerluan/Documents/Nintendo\ Switch/infra/TinfoilWebServer --config $DOTFILES_DIR/TinfoilWebServer.config.json"
+
