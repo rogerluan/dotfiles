@@ -11,3 +11,9 @@ fi
 
 # llvm
 export PATH="/usr/local/opt/llvm/bin:$PATH"
+
+# Lock OpenSSL at v1
+# export PATH="/opt/homebrew/Cellar/openssl@1.1/1.1.1t/bin:$PATH"
+
+# Gradle path
+export PATH=/opt/gradle/gradle-7.0.2/bin:$PATH

@@ -105,6 +105,11 @@ if which unsetopt > /dev/null; then
   unsetopt nomatch
 fi
 
+# Init jenv if it's already installed
+if which jenv > /dev/null; then
+  eval "$(jenv init -)"
+fi
+
 # Set up fnm
 # eval "$(fnm env --use-on-cd)"
 
