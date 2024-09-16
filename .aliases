@@ -55,7 +55,9 @@ function txt() {
   # Sublime Text
   # "/Applications/Sublime Text.app/Contents/SharedSupport/bin/subl" "$1"
   # VS Code
-  open -a "Visual Studio Code.app" $1
+  # open -a "Visual Studio Code.app" $1
+  # Cursor
+  open -a "Cursor.app" $1
 }
 
 # This command kills and relaunches several audio and bluetooth related processes,
