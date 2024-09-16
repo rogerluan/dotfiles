@@ -46,11 +46,14 @@ dependencies that could manage their installation.
 
 ### Direct Download
 
+- CleanShotX
 - ExpressVPN https://www.expressvpn.com/setup
 - Figma https://www.figma.com/download/desktop/mac
 - Firefox https://www.mozilla.org/en-US/firefox/new/
+- Google Chrome https://www.google.com/chrome
 - GPG Suite https://gpgtools.org
 - Insomnia https://insomnia.rest
+- Krisp.ai
 - LSUnusedResources https://github.com/tinymind/LSUnusedResources
 - MiddleClick https://github.com/artginzburg/MiddleClick-BigSur
 - Popcorn Time https://popcorntime.sh
@@ -69,20 +72,28 @@ dependencies that could manage their installation.
 
 ### App Store
 
+- 1Password
 - AdBlock
 - AdBlock Plus
+- Bakery
 - Bitwarden
+- DevCleaner for Xcode
 - Git Streak
 - Keynote
+- Messenger Launcher
+- Microsoft Outlook
 - NewFileMenuFree
 - Numbers
 - Pages
 - RAR Extractor Lite
+- Recurrence
 - Slack
 - SortingMatters
 - Telegram
+- Termius
 - Toggl
 - Trello
+- Velja
 
 ### Dock Pinned Applications
 
@@ -91,7 +102,7 @@ dependencies that could manage their installation.
 - Xcode
 - Slack
 - Telegram
-- SourceTree
+- Git Tower
 - Visual Studio Code
 - Toggl
 - Spotify
