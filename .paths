@@ -20,3 +20,7 @@ export PATH=/opt/gradle/gradle-7.0.2/bin:$PATH
 
 # MySQL path
 export PATH=/opt/homebrew/opt/mysql-client/bin:$PATH
+
+# Deno
+export DENO_INSTALL="$HOME/.deno"
+export PATH="$DENO_INSTALL/bin:$PATH"
