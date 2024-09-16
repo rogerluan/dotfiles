@@ -17,3 +17,6 @@ export PATH="/usr/local/opt/llvm/bin:$PATH"
 
 # Gradle path
 export PATH=/opt/gradle/gradle-7.0.2/bin:$PATH
+
+# MySQL path
+export PATH=/opt/homebrew/opt/mysql-client/bin:$PATH
