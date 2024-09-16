@@ -69,14 +69,17 @@ function killaudio() {
 }
 
 # Usage:
-# update-target --base-org:rogerluan --repo-name:dotfiles --target:someorg:perhapsabranch
+# update-target someorg:perhapsabranch
 function update-target() {
-  TARGET_ARGUMENT="${3##--target:}" # e.g. 'someoneelse:anotherbranch' or 'revolter/fix-slack-head-branch' or 'rogerluan-fix-important-feature'
-
-  if [[ $TARGET_ARGUMENT =~ : ]]; then
-    source $DOTFILES_DIR/Utilities/update_fork.sh "$@"
+  TARGET="$1" # e.g. 'someoneelse:anotherbranch' or 'revolter/fix-slack-head-branch' or 'rogerluan-fix-important-feature'
+  BASE_ORG=$(giturl | awk -F'[:/]' '{print $2}')
+  REPO_NAME=$(giturl | awk -F'[:/]' '{print $3}' | sed 's/.git$//')
+  if [[ $TARGET =~ : ]]; then
+    echo "Updating a branch from a fork"
+    bash $DOTFILES_DIR/Utilities/update_fork.sh --base-org:$BASE_ORG --repo-name:$REPO_NAME --target:$TARGET
   else
-    source $DOTFILES_DIR/Utilities/update_branch.sh "$@"
+    echo "Updating a branch of the same repo"
+    bash $DOTFILES_DIR/Utilities/update_branch.sh --base-org:$BASE_ORG --repo-name:$REPO_NAME --target:$TARGET
   fi
 }
 
