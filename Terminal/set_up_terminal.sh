@@ -19,6 +19,14 @@ else
   echo "oh-my-zsh is already installed."
 fi
 
+# Install oh-my-zsh custom plugins
+if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" ]; then
+  git clone https://github.com/zsh-users/zsh-autosuggestions.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+fi
+if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting" ]; then
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+fi
+
 # Install powerline-shell font "Meslo Slashed"
 git clone git@github.com:powerline/fonts.git --depth=1
 cd fonts

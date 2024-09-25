@@ -37,6 +37,8 @@ plugins=(
   pyenv
   rails
   z
+  zsh-autosuggestions
+  zsh-syntax-highlighting
 )
 
 # Fixes a warning when initializing zsh that can be safely silented.
