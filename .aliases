@@ -44,10 +44,10 @@ function sourcetree() {
 }
 
 alias st=sourcetree
-alias gt=gittower
+alias gt='gittower -n'
 
 function doit() {
-  gittower "$1"
+  gt "$1"
   txt "$1"
 }
 
