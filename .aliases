@@ -181,3 +181,7 @@ alias tinfoil="/Users/rogerluan/Documents/Nintendo\ Switch/infra/TinfoilWebServe
 function rgbtohex() {
   ruby $DOTFILES_DIR/Utilities/rgb_to_hex.rb "$@"
 }
+
+search-apps() {
+  ruby $DOTFILES_DIR/Utilities/search-apps.rb "$@"
+}

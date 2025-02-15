@@ -19,7 +19,9 @@ export PATH="/usr/local/opt/llvm/bin:$PATH"
 export PATH=/opt/gradle/gradle-7.0.2/bin:$PATH
 
 # MySQL path
-export PATH=/opt/homebrew/opt/mysql-client/bin:$PATH
+# export PATH=/opt/homebrew/opt/mysql-client/bin:$PATH
+# mysql-client v9 has some password plugin issues (https://github.com/Homebrew/homebrew-core/issues/180498), so we've locked it to v8.4:
+export PATH=/opt/homebrew/opt/mysql-client@8.4/bin:$PATH
 
 # Deno
 export DENO_INSTALL="$HOME/.deno"
