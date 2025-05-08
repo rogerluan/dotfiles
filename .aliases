@@ -170,7 +170,9 @@ function master_diff() {
   git diff master:"$1" "$1" > "$1".patch
 }
 
-alias typo="typos --config $DOTFILES_DIR/.typos.toml"
+function typo() {
+  typos --config $DOTFILES_DIR/.typos.toml "$@"
+}
 
 function git_checkout_fork() {
   ruby $DOTFILES_DIR/Utilities/git_checkout_fork.rb "$@"
