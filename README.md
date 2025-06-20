@@ -72,16 +72,13 @@ dependencies that could manage their installation.
 
 ### App Store
 
-- 1Password
 - AdBlock
 - AdBlock Plus
 - Bakery
-- Bitwarden
 - DevCleaner for Xcode
 - Git Streak
 - Keynote
 - Messenger Launcher
-- Microsoft Outlook
 - NewFileMenuFree
 - Numbers
 - Pages
@@ -99,13 +96,14 @@ dependencies that could manage their installation.
 
 - Finder
 - Safari
-- Xcode
 - Slack
-- Telegram
 - Git Tower
+- Xcode
+- Telegram
+- Spotify
 - Visual Studio Code
 - Toggl
-- Spotify
+- ChatGPT
 - Terminal
 
 ## Special thanks to…
