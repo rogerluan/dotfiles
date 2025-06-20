@@ -18,3 +18,4 @@ cask "copilot-for-xcode" # https://github.com/intitni/CopilotForXcode
 brew "aria2"
 brew "typos-cli" # https://github.com/crate-ci/typos
 # brew install --cask --no-quarantine middleclick # Temp commented out because it's broken.
+brew "dopplerhq/cli/doppler" # https://www.doppler.com/
