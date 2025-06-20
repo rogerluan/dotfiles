@@ -1,7 +1,5 @@
 tap "heroku/brew"
 tap "homebrew/bundle"
-tap "homebrew/cask"
-tap "homebrew/core"
 tap "robotsandpencils/made"
 # brew "ruby-build" # https://github.com/rbenv/ruby-build
 brew "gnupg"
