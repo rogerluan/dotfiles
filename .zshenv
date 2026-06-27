@@ -1,3 +1,9 @@
-# Temporary disable until I figure out if ~/.zlogin resolves these Xcode issues.
-# Delete this file if we confirm that it does.
-# source $HOME/.paths
+# Make paths and secrets available to non-interactive shells
+
+if [ -f "$HOME/.paths" ]; then
+  source "$HOME/.paths"
+fi
+
+if [ -f "$HOME/.secrets" ]; then
+  source "$HOME/.secrets"
+fi
