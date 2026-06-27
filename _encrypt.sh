@@ -16,7 +16,6 @@ declare -a FILES_TO_ENCRYPT=(
   ".secrets"
   ".z"
   ".zsh_history"
-  "BitBarPlugins"
 )
 
 # Encrypt files or directories
