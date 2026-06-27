@@ -132,3 +132,6 @@ if [ -f $SECRETS_FILE ]; then
 else
   echo "Warning: '$SECRETS_FILE' doesn't exist yet so it wasn't sourced."
 fi
+
+# bun completions
+[ -s "$HOME/.oh-my-zsh/completions/_bun" ] && source "$HOME/.oh-my-zsh/completions/_bun"

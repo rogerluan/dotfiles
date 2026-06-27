@@ -26,3 +26,8 @@ export PATH=/opt/homebrew/opt/mysql-client@8.4/bin:$PATH
 # Deno
 export DENO_INSTALL="$HOME/.deno"
 export PATH="$DENO_INSTALL/bin:$PATH"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
