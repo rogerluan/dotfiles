@@ -188,3 +188,13 @@ function rgbtohex() {
 search-apps() {
   ruby $DOTFILES_DIR/Utilities/search-apps.rb "$@"
 }
+
+function clean-git-ignored() {
+  git rm -r --cached .
+  git add .
+}
+
+# Usage: git_commit_backfill 2025-07-20 "Improve formatting."
+function git_commit_backfill() {
+  GIT_AUTHOR_DATE="$1 11:27:55 -0300" GIT_COMMITTER_DATE="$1 11:27:55 -0300" git commit -m "$2"
+}
