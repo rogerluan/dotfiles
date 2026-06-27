@@ -97,10 +97,6 @@ if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi
 
-# Load nvm
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
-
 # https://zsh.sourceforge.io/Doc/Release/Options.html#index-NOMATCH
 # https://thoughtbot.com/blog/how-to-use-arguments-in-a-rake-task
 if which unsetopt > /dev/null; then

@@ -25,8 +25,6 @@ if [[ $(arch) == 'arm64' ]]; then
   export APPLE_SILICON=true
 fi
 
-export NVM_DIR="$HOME/.nvm"
-
 # export JAVA_HOME=/Applications/Android\ Studio.app/Contents/jre/Contents/Home
 # export JAVA_HOME=/usr/libexec/java_home
 export JAVA_HOME=$(/usr/libexec/java_home)
