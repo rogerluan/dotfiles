@@ -32,7 +32,6 @@ BUNDLED_COMMANDS=(
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   bundler
-  git
   pod
   pyenv
   rails
