@@ -7,6 +7,7 @@ brew "bfg" # Remove large files or passwords from Git history like git-filter-br
 brew "cmake" # Cross-platform make
 brew "docker" # You know what it is
 brew "dopplerhq/cli/doppler" # https://www.doppler.com/
+brew "fnm" # Fast Node Manager (Node version manager) — https://github.com/Schniz/fnm
 brew "gh" # GitHub command-line tool
 brew "gnupg"
 brew "heroku/brew/heroku" # https://devcenter.heroku.com/articles/heroku-cli

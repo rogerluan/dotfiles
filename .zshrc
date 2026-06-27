@@ -114,7 +114,9 @@ if which ~/.local/bin/mise > /dev/null; then
 fi
 
 # Set up fnm
-# eval "$(fnm env --use-on-cd)"
+if which fnm > /dev/null; then
+  eval "$(fnm env --use-on-cd --shell zsh)"
+fi
 
 ################################################################################
 # Aliases
