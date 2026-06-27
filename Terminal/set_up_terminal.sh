@@ -49,6 +49,23 @@ open $DIR/Solarized\ Dark.terminal
 defaults write com.apple.Terminal "Default Window Settings" -string "Solarized Dark"
 defaults write com.apple.Terminal "Startup Window Settings" -string "Solarized Dark"
 
+# iTerm2: install the Solarized Dark dynamic profile (colors + Meslo Powerline font)
+# and make it the default profile. Dynamic profiles in this folder are loaded
+# automatically on each iTerm2 launch — no GUI clicks needed.
+# Docs: https://iterm2.com/documentation-dynamic-profiles.html
+ITERM_DYNAMIC_PROFILES_DIR="$HOME/Library/Application Support/iTerm2/DynamicProfiles"
+mkdir -p "$ITERM_DYNAMIC_PROFILES_DIR"
+cp "$DIR/Solarized Dark.json" "$ITERM_DYNAMIC_PROFILES_DIR/Solarized Dark.json"
+
+# Guid must match the one in Solarized Dark.json
+defaults write com.googlecode.iterm2 "Default Bookmark Guid" -string "F5CF0F1B-5F1B-4A1C-9D3E-50145A1DED44"
+
+# Also drop the .itermcolors preset next to the profile so it shows up in
+# Preferences → Profiles → Colors → Color Presets for ad-hoc use.
+ITERM_COLOR_PRESETS_DIR="$HOME/Library/Application Support/iTerm2/ColorPresets"
+mkdir -p "$ITERM_COLOR_PRESETS_DIR"
+cp "$DIR/Solarized Dark.itermcolors" "$ITERM_COLOR_PRESETS_DIR/Solarized Dark.itermcolors"
+
 echo "Copying $DOTFILES_DIR/Terminal/powerline-shell-config.json → $HOME/.config/powerline-shell/config.json"
 mkdir -p $HOME/.config/powerline-shell/
 cp $DOTFILES_DIR/Terminal/powerline-shell-config.json $HOME/.config/powerline-shell/config.json

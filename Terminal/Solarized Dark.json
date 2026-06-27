@@ -1,0 +1,77 @@
+{
+  "Profiles": [
+    {
+      "Name": "Solarized Dark",
+      "Guid": "F5CF0F1B-5F1B-4A1C-9D3E-50145A1DED44",
+      "Dynamic Profile Parent Name": "Default",
+
+      "Normal Font": "MesloLGSForPowerline-Regular 12",
+      "Non Ascii Font": "MesloLGSForPowerline-Regular 12",
+      "Use Non-ASCII Font": true,
+      "ASCII Anti Aliased": true,
+      "Non-ASCII Anti Aliased": true,
+      "Horizontal Spacing": 1,
+      "Vertical Spacing": 1,
+      "Use Bold Font": true,
+      "Use Bright Bold": true,
+      "Use Italic Font": true,
+
+      "Option Key Sends": 2,
+      "Right Option Key Sends": 2,
+
+      "Cursor Type": 1,
+      "Blinking Cursor": true,
+
+      "Background Color": { "Red Component": 0.0,    "Green Component": 0.1686, "Blue Component": 0.2117, "Color Space": "sRGB", "Alpha Component": 1.0 },
+      "Foreground Color": { "Red Component": 0.5137, "Green Component": 0.5803, "Blue Component": 0.5882, "Color Space": "sRGB" },
+      "Bold Color":       { "Red Component": 0.5764, "Green Component": 0.6313, "Blue Component": 0.6313, "Color Space": "sRGB" },
+      "Cursor Color":     { "Red Component": 0.5137, "Green Component": 0.5803, "Blue Component": 0.5882, "Color Space": "sRGB" },
+      "Cursor Text Color":{ "Red Component": 0.0,    "Green Component": 0.1686, "Blue Component": 0.2117, "Color Space": "sRGB" },
+      "Selection Color":  { "Red Component": 0.1333, "Green Component": 0.3490, "Blue Component": 0.4157, "Color Space": "sRGB" },
+      "Selected Text Color":{ "Red Component": 0.9333,"Green Component": 0.9098,"Blue Component": 0.8352, "Color Space": "sRGB" },
+      "Link Color":       { "Red Component": 0.1490, "Green Component": 0.5450, "Blue Component": 0.8235, "Color Space": "sRGB" },
+      "Badge Color":      { "Red Component": 0.8627, "Green Component": 0.1960, "Blue Component": 0.1843, "Color Space": "sRGB", "Alpha Component": 0.5 },
+
+      "Ansi 0 Color":  { "Red Component": 0.0274, "Green Component": 0.2117, "Blue Component": 0.2588, "Color Space": "sRGB" },
+      "Ansi 1 Color":  { "Red Component": 0.8627, "Green Component": 0.1960, "Blue Component": 0.1843, "Color Space": "sRGB" },
+      "Ansi 2 Color":  { "Red Component": 0.5215, "Green Component": 0.6000, "Blue Component": 0.0000, "Color Space": "sRGB" },
+      "Ansi 3 Color":  { "Red Component": 0.7098, "Green Component": 0.5372, "Blue Component": 0.0000, "Color Space": "sRGB" },
+      "Ansi 4 Color":  { "Red Component": 0.1490, "Green Component": 0.5450, "Blue Component": 0.8235, "Color Space": "sRGB" },
+      "Ansi 5 Color":  { "Red Component": 0.8274, "Green Component": 0.2117, "Blue Component": 0.5098, "Color Space": "sRGB" },
+      "Ansi 6 Color":  { "Red Component": 0.1647, "Green Component": 0.6313, "Blue Component": 0.5960, "Color Space": "sRGB" },
+      "Ansi 7 Color":  { "Red Component": 0.9333, "Green Component": 0.9098, "Blue Component": 0.8352, "Color Space": "sRGB" },
+      "Ansi 8 Color":  { "Red Component": 0.0,    "Green Component": 0.1686, "Blue Component": 0.2117, "Color Space": "sRGB" },
+      "Ansi 9 Color":  { "Red Component": 0.7960, "Green Component": 0.2941, "Blue Component": 0.0862, "Color Space": "sRGB" },
+      "Ansi 10 Color": { "Red Component": 0.3450, "Green Component": 0.4313, "Blue Component": 0.4588, "Color Space": "sRGB" },
+      "Ansi 11 Color": { "Red Component": 0.3960, "Green Component": 0.4823, "Blue Component": 0.5137, "Color Space": "sRGB" },
+      "Ansi 12 Color": { "Red Component": 0.5137, "Green Component": 0.5803, "Blue Component": 0.5882, "Color Space": "sRGB" },
+      "Ansi 13 Color": { "Red Component": 0.4235, "Green Component": 0.4431, "Blue Component": 0.7686, "Color Space": "sRGB" },
+      "Ansi 14 Color": { "Red Component": 0.5764, "Green Component": 0.6313, "Blue Component": 0.6313, "Color Space": "sRGB" },
+      "Ansi 15 Color": { "Red Component": 0.9921, "Green Component": 0.9647, "Blue Component": 0.8901, "Color Space": "sRGB" },
+
+      "Transparency": 0.05,
+      "Blur": true,
+      "Blur Radius": 2.0,
+
+      "Terminal Type": "xterm-256color",
+      "Scrollback Lines": 10000,
+      "Unlimited Scrollback": false,
+      "Mouse Reporting": true,
+      "Silence Bell": true,
+      "Visual Bell": false,
+      "Flashing Bell": false,
+      "BM Growl": false,
+
+      "Columns": 120,
+      "Rows": 35,
+
+      "Custom Directory": "Recycle",
+      "Working Directory": "",
+      "Command": "",
+      "Custom Command": "No",
+
+      "Ambiguous Double Width": false,
+      "Draw Powerline Glyphs": true
+    }
+  ]
+}

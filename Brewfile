@@ -23,5 +23,6 @@ brew "swiftformat" # https://github.com/nicklockwood/SwiftFormat
 brew "typos-cli" # https://github.com/crate-ci/typos
 brew "xcbeautify" # https://github.com/tuist/xcbeautify
 cask "asset-catalog-tinkerer" # https://github.com/insidegui/AssetCatalogTinkerer
+cask "iterm2" # Terminal replacement (configured via Terminal/Solarized Dark.json dynamic profile)
 cask "middleclick" # Utility to enable middle click on trackpads
 cask "tinypng4mac" # https://github.com/kyleduo/TinyPNG4Mac
