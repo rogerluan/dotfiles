@@ -13,6 +13,12 @@ source $DOTFILES_DIR/_encrypt.sh $1
 echo "Copying ~/.config/powerline-shell/config.json…"
 cp $HOME/.config/powerline-shell/config.json $DOTFILES_DIR/Terminal/powerline-shell-config.json
 
+# Paseo rewrites ~/.paseo/config.json atomically (so it can't be symlinked);
+# snapshot the daemon-config subset here on each repo update instead.
+echo "Copying ~/.paseo/config.json…"
+mkdir -p $DOTFILES_DIR/.paseo
+cp $HOME/.paseo/config.json $DOTFILES_DIR/.paseo/config.json
+
 echo "Copying Xcode font and color themes…"
 cp -r $FONT_AND_COLOR_THEMES_DIR $DOTFILES_DIR/Xcode
 echo "Copying Xcode code snippets…"

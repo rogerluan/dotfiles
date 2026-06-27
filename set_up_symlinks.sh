@@ -19,6 +19,13 @@ ln -s $DOTFILES_DIR/.zshenv $HOME/.zshenv
 ln -s $DOTFILES_DIR/.zshrc $HOME/.zshrc
 ln -s $DOTFILES_DIR/.python-version $HOME/.python-version
 
+# Paseo config: COPIED, not symlinked — Paseo rewrites it atomically (temp +
+# rename), which replaces a symlink with a real file. Deploy only when absent so
+# an existing live config isn't clobbered. Changes are captured back into the
+# repo by _update_repo.sh (the manual system→repo backup step).
+mkdir -p $HOME/.paseo
+[ -e $HOME/.paseo/config.json ] || cp $DOTFILES_DIR/.paseo/config.json $HOME/.paseo/config.json
+
 
 # TODO: We might not need this, this is why it's commented out. After going through the setup
 # steps in a new machine, check if the powerline shell utility works out of the box. If so,

@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "daemon": {
+    "listen": "127.0.0.1:6767",
+    "mcp": {
+      "injectIntoAgents": true
+    },
+    "autoArchiveAfterMerge": false,
+    "enableTerminalAgentHooks": true,
+    "appendSystemPrompt": "",
+    "terminalProfiles": [
+      {
+        "id": "claude",
+        "name": "Claude Code",
+        "command": "~/.dotfiles/bin/claude",
+        "icon": "claude"
+      },
+      {
+        "id": "codex",
+        "name": "Codex",
+        "command": "codex",
+        "icon": "codex"
+      },
+      {
+        "id": "opencode",
+        "name": "OpenCode",
+        "command": "opencode",
+        "icon": "opencode"
+      }
+    ],
+    "cors": {
+      "allowedOrigins": [
+        "https://app.paseo.sh"
+      ]
+    },
+    "relay": {
+      "enabled": true
+    }
+  },
+  "app": {
+    "baseUrl": "https://app.paseo.sh"
+  },
+  "agents": {
+    "providers": {
+      "claude": {
+        "command": [
+          "~/.dotfiles/bin/claude"
+        ]
+      },
+      "pi": {
+        "enabled": false
+      },
+      "opencode": {
+        "enabled": false
+      },
+      "copilot": {
+        "enabled": false
+      }
+    }
+  }
+}
