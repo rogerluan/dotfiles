@@ -91,20 +91,14 @@ if which rbenv > /dev/null; then
   eval "$(rbenv init -)"
 fi
 
-# Initialize pyenv if it's already installed
-if command -v pyenv 1>/dev/null 2>&1; then
-  eval "$(pyenv init -)"
-fi
+# pyenv is initialized by the oh-my-zsh `pyenv` plugin (see plugins=(...) above),
+# which runs `pyenv init - --no-rehash`. No manual init needed here — a second
+# `pyenv init -` only forces a slow `pyenv rehash` on every shell startup.
 
 # https://zsh.sourceforge.io/Doc/Release/Options.html#index-NOMATCH
 # https://thoughtbot.com/blog/how-to-use-arguments-in-a-rake-task
 if which unsetopt > /dev/null; then
   unsetopt nomatch
-fi
-
-# Init jenv if it's already installed
-if which jenv > /dev/null; then
-  eval "$(jenv init -)"
 fi
 
 # Mise - https://mise.jdx.dev

@@ -15,6 +15,7 @@ ln -s $DOTFILES_DIR/.gemrc $HOME/.gemrc
 ln -s $DOTFILES_DIR/.markdownlintrc $HOME/.markdownlintrc
 ln -s $DOTFILES_DIR/.paths $HOME/.paths
 ln -s $DOTFILES_DIR/.ruby-version $HOME/.ruby-version
+ln -s $DOTFILES_DIR/.zprofile $HOME/.zprofile
 ln -s $DOTFILES_DIR/.zshenv $HOME/.zshenv
 ln -s $DOTFILES_DIR/.zshrc $HOME/.zshrc
 ln -s $DOTFILES_DIR/.python-version $HOME/.python-version

@@ -1,6 +1,12 @@
 export PATH="$HOME/.rbenv/shims:$PATH"
 export PATH="$HOME/.rbenv/bin:$PATH"
 
+# pyenv shims. Sourced via .zshenv → runs for EVERY shell, before oh-my-zsh
+# loads, so the oh-my-zsh `pyenv` plugin sees the shims already on $PATH and
+# doesn't print its "badly configured (missing pyenv shims in $PATH)" warning.
+# Also makes pyenv's python available to non-interactive shells and scripts.
+export PATH="$HOME/.pyenv/shims:$PATH"
+
 # Enable use of `gmake` aliased as `make`
 export PATH="/usr/local/opt/make/libexec/gnubin:$PATH"
 
