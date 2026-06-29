@@ -1,0 +1,93 @@
+#!/bin/sh
+# claude-pick-account — choose ONE CLAUDE_CONFIG_DIR from the candidate pool on
+# stdin (best-first, one per line, from claude-account-dir), based on usage.
+#
+# Algorithm (walk the pool in order: account 1, then 2, …):
+#   • read the account's usage;
+#   • if usage is AT/OVER the threshold  → skip to the next account;
+#   • the first account UNDER the threshold → choose it (print, stop);
+#   • if usage can't be read (no token / API error) → use it as-is (print, stop)
+#     — we can't prove it's over, so we don't skip it;
+#   • if every account is over the threshold → print nothing, so the caller
+#     leaves CLAUDE_CONFIG_DIR unset (the default account).
+#
+# ALL the tunable levers (on/off, threshold, which usage window, cache TTL) live
+# in ./claude-accounts.conf — edit THAT file, not this script.
+
+set -eu
+SELF_DIR=$(cd "$(dirname "$0")" && pwd)
+CACHE=${XDG_CACHE_HOME:-$HOME/.cache}/claude-usage
+
+# ── Levers: built-in defaults, overridden by claude-accounts.conf ────────────
+USAGE_AWARE=1
+USAGE_THRESHOLD=95
+USAGE_METRIC=max
+USAGE_CACHE_TTL=600
+[ -f "$SELF_DIR/claude-accounts.conf" ] && . "$SELF_DIR/claude-accounts.conf"
+# ─────────────────────────────────────────────────────────────────────────────
+
+input=$(cat)
+[ -n "$input" ] || exit 0
+
+# Split stdin (newline-separated) into positional params, no globbing.
+set -f
+IFS='
+'
+set -- $input
+unset IFS
+set +f
+
+[ -n "${1:-}" ] || exit 0
+
+# Usage-awareness off, or only one account in the pool: take the first.
+if [ "$USAGE_AWARE" != "1" ] || [ "$#" -le 1 ]; then
+  printf '%s\n' "$1"
+  exit 0
+fi
+
+mkdir -p "$CACHE" 2>/dev/null || true
+now=$(date +%s 2>/dev/null || echo 0)
+
+# Echo the chosen account and stop the whole script.
+choose() { printf '%s\n' "$1"; exit 0; }
+
+for d in "$@"; do
+  cf="$CACHE/$(basename "$d")"
+  line=""
+
+  # Use a fresh cached usage line if we have one.
+  # Cache file format:  <unix-timestamp> five_hour=.. seven_day=.. max=..
+  if [ -f "$cf" ]; then
+    cts=$(cut -d' ' -f1 "$cf" 2>/dev/null || echo "")
+    case "$cts" in
+      ''|*[!0-9]*) : ;;
+      *) [ "$now" -gt 0 ] && [ $((now - cts)) -lt "$USAGE_CACHE_TTL" ] \
+           && line=$(cut -d' ' -f2- "$cf" 2>/dev/null) ;;
+    esac
+  fi
+
+  # Cache miss → ask the usage API (short timeout so a hang can't block launch).
+  if [ -z "$line" ]; then
+    line=$(CLAUDE_CONFIG_DIR="$d" CLAUDE_USAGE_MAX_TIME=5 "$SELF_DIR/claude-usage" 2>/dev/null || true)
+    case "$line" in
+      *=*) printf '%s %s\n' "$now" "$line" > "$cf" 2>/dev/null || true ;;
+      *) line="" ;;   # not a usage line → treat as unreadable
+    esac
+  fi
+
+  # Usage unreadable → use this account as-is (don't skip on a guess).
+  [ -n "$line" ] || choose "$d"
+
+  # Pull the configured window's percentage out of the usage line.
+  util=$(printf '%s' "$line" | sed -n "s/.*$USAGE_METRIC=\([0-9.]*\).*/\1/p")
+  [ -n "$util" ] || choose "$d"   # window missing → use as-is
+
+  # Under threshold → stay here. Otherwise fall through to the next account.
+  if awk "BEGIN{exit !($util < $USAGE_THRESHOLD)}" 2>/dev/null; then
+    choose "$d"
+  fi
+done
+
+# Every account in the pool was over the threshold → print nothing → the caller
+# unsets CLAUDE_CONFIG_DIR and falls back to the default account.
+exit 0

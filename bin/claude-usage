@@ -1,0 +1,104 @@
+#!/bin/sh
+# claude-usage — print Claude Pro/Max usage for an account, via the same
+# undocumented endpoint Claude Code's own `/usage` command calls:
+#
+#   GET https://api.anthropic.com/api/oauth/usage
+#   Authorization: Bearer <oauth access_token>
+#   anthropic-beta: oauth-2025-04-20
+#   User-Agent: claude-code/<version>   (REQUIRED — a non-claude-code UA gets
+#                                        a harshly rate-limited 429 bucket)
+#
+# Output (one line, parseable):  five_hour=<pct> seven_day=<pct> max=<pct>
+# Use --json to dump the raw response. Exit 0 on success, 2 on no token,
+# 3 on HTTP/parse error. Designed to be cheap; cache the result (≤ ~180s TTL)
+# before calling it in a hot path like every `claude` launch.
+#
+# This is just the usage READER for one account. The selection levers
+# (thresholds, which window, on/off, cache TTL) live in claude-accounts.conf and
+# are consumed by claude-pick-account — there's nothing to tune in this file.
+#
+# Token resolution order (first that yields a token wins):
+#   1) $CLAUDE_CODE_OAUTH_TOKEN                          (explicit override)
+#   2) a per-account token file: $CLAUDE_USAGE_TOKEN_FILE, else
+#      ~/.config/claude-accounts/<basename of CLAUDE_CONFIG_DIR>.token
+#      (a long-lived token from `claude setup-token` — the robust multi-account
+#       path, since macOS Keychain holds only ONE account's token at a time)
+#   3) <CLAUDE_CONFIG_DIR>/.credentials.json            (Linux/Windows shape)
+#   4) macOS Keychain item "Claude Code-credentials"    (the default account)
+
+set -eu
+
+usage_json=""
+want_json=0
+[ "${1:-}" = "--json" ] && want_json=1
+
+cfg_dir=${CLAUDE_CONFIG_DIR:-$HOME/.claude}
+acct_name=$(basename "$cfg_dir")
+# UA must start with "claude-code/" or the endpoint hands back a 429-heavy
+# bucket. Exact version isn't critical; keep it static so we don't spawn the
+# 224MB claude binary on a hot path. Override with CLAUDE_USAGE_UA_VERSION.
+ver=${CLAUDE_USAGE_UA_VERSION:-2.1.0}
+max_time=${CLAUDE_USAGE_MAX_TIME:-10}
+
+extract_token() {  # stdin: credentials JSON -> stdout: access token
+  python3 -c "import sys,json
+try:
+    d=json.load(sys.stdin); o=d.get('claudeAiOauth',d)
+    print(o.get('accessToken') or o.get('access_token') or '')
+except Exception: print('')" 2>/dev/null
+}
+
+TOKEN=""
+# 1) explicit env override
+if [ -n "${CLAUDE_CODE_OAUTH_TOKEN:-}" ]; then
+  TOKEN=$CLAUDE_CODE_OAUTH_TOKEN
+fi
+# 2) per-account long-lived token file
+if [ -z "$TOKEN" ]; then
+  tf=${CLAUDE_USAGE_TOKEN_FILE:-"$HOME/.config/claude-accounts/$acct_name.token"}
+  [ -f "$tf" ] && TOKEN=$(tr -d ' \t\r\n' < "$tf")
+fi
+# 3) credentials file inside the config dir
+if [ -z "$TOKEN" ] && [ -f "$cfg_dir/.credentials.json" ]; then
+  TOKEN=$(extract_token < "$cfg_dir/.credentials.json")
+fi
+# 4) macOS Keychain — ONLY for the default account. The Keychain holds a single
+#    "Claude Code-credentials" token (the default ~/.claude account), so using it
+#    for any other config dir would misattribute the default account's usage to
+#    that account. Non-default accounts must supply a token via (1)/(2)/(3).
+if [ -z "$TOKEN" ] && [ "$cfg_dir" = "$HOME/.claude" ] && command -v security >/dev/null 2>&1; then
+  TOKEN=$(security find-generic-password -s "Claude Code-credentials" -w 2>/dev/null | extract_token || true)
+fi
+
+if [ -z "$TOKEN" ]; then
+  echo "claude-usage: no OAuth token for account '$acct_name' (cfg: $cfg_dir)" >&2
+  exit 2
+fi
+
+resp=$(curl -s --max-time "$max_time" https://api.anthropic.com/api/oauth/usage \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "anthropic-beta: oauth-2025-04-20" \
+  -H "User-Agent: claude-code/$ver" \
+  -H "Content-Type: application/json" 2>/dev/null || true)
+
+if [ -z "$resp" ]; then
+  echo "claude-usage: empty response (network?/token expired)" >&2
+  exit 3
+fi
+if [ "$want_json" = "1" ]; then
+  printf '%s\n' "$resp"
+  exit 0
+fi
+
+printf '%s' "$resp" | python3 -c "import sys,json
+try:
+    d=json.load(sys.stdin)
+except Exception:
+    sys.stderr.write('claude-usage: non-JSON response (token likely expired -> 401)\n'); sys.exit(3)
+if isinstance(d,dict) and d.get('error'):
+    sys.stderr.write('claude-usage: API error: %s\n' % json.dumps(d['error'])); sys.exit(3)
+def u(k):
+    v=d.get(k) or {}
+    return float(v.get('utilization') or 0.0)
+fh, sd = u('five_hour'), u('seven_day')
+print('five_hour=%.1f seven_day=%.1f max=%.1f' % (fh, sd, max(fh, sd)))" 2>/dev/null || { echo "claude-usage: parse failed" >&2; exit 3; }

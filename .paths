@@ -31,3 +31,11 @@ export PATH="$DENO_INSTALL/bin:$PATH"
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
+# Claude Code / uv installer env — prepends ~/.local/bin (where the real
+# `claude` binary lives). Sourced here, before the personal-bin line below, so
+# the account-selecting shim ends up AHEAD of the real claude on PATH.
+[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
+
+# Personal bin — MUST be last so the `claude` account-selecting shim
+# (~/.dotfiles/bin/claude) shadows the real claude on PATH.
+export PATH="$HOME/.dotfiles/bin:$PATH"

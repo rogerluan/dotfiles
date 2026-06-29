@@ -1,0 +1,35 @@
+#!/bin/sh
+# claude-account-dir — print the candidate CLAUDE_CONFIG_DIRs for a path,
+# best-first, one per line. EMPTY output means "use Claude's default account":
+# leave CLAUDE_CONFIG_DIR UNSET. (Do NOT set it to ~/.claude — that points at a
+# different config-file location than the unset default and re-onboards.)
+#
+# How a repo maps to an account team:
+#   1. take the GitHub ORG from the repo's `origin` remote, then
+#   2. look for config dirs named  ~/.claude-<org>-<N>  (N = 1, 2, 3, …).
+# Each such dir is one Claude account for that org's team; they're emitted in N
+# order so the picker can fail over by usage. If the org has no matching dir (or
+# the path isn't a GitHub repo), emit nothing → the default (personal) account.
+#
+# Identity is the ORG, not the on-disk path, so it survives random-slug worktrees
+# (Paseo, `git worktree`): a worktree shares its source repo's git config.
+#
+# Add an account for an org: create ~/.claude-<org>-<next-N>, then run
+# `CLAUDE_CONFIG_DIR=~/.claude-<org>-<N> claude` once and `/login`.
+
+dir=${1:-$PWD}
+remote=$(git -C "$dir" remote get-url origin 2>/dev/null) || remote=""
+
+# GitHub org from github.com[:/]<org>/<repo> (SSH or HTTPS), lowercased.
+org=$(printf '%s' "$remote" | sed -nE 's#.*github\.com[:/]+([^/]+)/.*#\1#p' | tr '[:upper:]' '[:lower:]')
+[ -n "$org" ] || exit 0
+
+# Emit existing ~/.claude-<org>-<digits> dirs in numeric order (best-first).
+# An unmatched glob stays literal and is filtered out by the -d test.
+for d in "$HOME/.claude-$org-"*; do
+  [ -d "$d" ] || continue
+  case "${d##*-}" in
+    ''|*[!0-9]*) continue ;;   # only purely-numeric suffixes (…-1, …-2, …)
+  esac
+  printf '%s\n' "$d"
+done | sort -V

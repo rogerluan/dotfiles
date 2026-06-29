@@ -198,3 +198,35 @@ function clean-git-ignored() {
 function git_commit_backfill() {
   GIT_AUTHOR_DATE="$1 11:27:55 -0300" GIT_COMMITTER_DATE="$1 11:27:55 -0300" git commit -m "$2"
 }
+
+################################################################################
+# Claude Code — per-project account selection
+################################################################################
+# A repo's GitHub org picks the Claude account: config dirs named
+# ~/.claude-<org>-<N> are that org's account pool; anything else uses the default
+# ~/.claude (personal). Identity is the org, NOT the on-disk path — resolved by
+# ~/.dotfiles/bin/claude-account-dir — so it survives random-slug worktrees
+# (Paseo, `git worktree`): a worktree shares its source repo's git config. This
+# chpwd hook keeps the SHELL env correct; the authoritative pick at launch is the
+# ~/.dotfiles/bin/claude shim (which also covers contexts this hook can't reach,
+# e.g. Paseo spawning claude with no .zshrc). Both read the same
+# claude-account-dir, so they agree. Empty result ⇒ leave CLAUDE_CONFIG_DIR UNSET
+# (≠ ~/.claude, which is a different config path that re-onboards).
+function _claude_config_dir_switch() {
+  # Only manage our own values (default, or a ~/.claude-* pool dir); respect
+  # anything else set by hand.
+  case "${CLAUDE_CONFIG_DIR:-}" in
+    ""|"$HOME/.claude"|"$HOME/.claude-"*) ;;
+    *) return ;;
+  esac
+  local dir
+  dir=$("$HOME/.dotfiles/bin/claude-account-dir" "$PWD" 2>/dev/null | head -n1)
+  if [[ -n "$dir" && "$dir" != "$HOME/.claude" ]]; then
+    export CLAUDE_CONFIG_DIR="$dir"
+  else
+    unset CLAUDE_CONFIG_DIR
+  fi
+}
+autoload -Uz add-zsh-hook
+add-zsh-hook chpwd _claude_config_dir_switch
+_claude_config_dir_switch  # apply to the shell's starting directory

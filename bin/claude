@@ -1,0 +1,43 @@
+#!/bin/sh
+# claude — per-project account-selecting shim for Claude Code.
+#
+# At launch it picks the right CLAUDE_CONFIG_DIR for the current directory (by
+# the repo's GitHub org, via claude-account-dir + claude-pick-account) and execs
+# the real `claude`. Because it runs at LAUNCH in the process's own cwd, it covers
+# BOTH contexts that bypass the interactive shell's chpwd hook:
+#   - your terminal (this dir is first on PATH), and
+#   - Paseo agents/terminals, which spawn `claude` directly with cwd = the
+#     worktree (a random-slug folder) and no .zshrc / chpwd at all.
+#
+# It is authoritative: it always sets CLAUDE_CONFIG_DIR from the cwd, overriding
+# any inherited value (e.g. a Paseo daemon launched with a global
+# CLAUDE_CONFIG_DIR). To change the mapping, edit claude-account-dir.
+
+set -eu
+SELF_DIR=$(cd "$(dirname "$0")" && pwd)
+
+# Pick the account for this directory. Empty (or the default ~/.claude) means
+# "use Claude's default account" -> UNSET CLAUDE_CONFIG_DIR. Setting it to
+# ~/.claude is NOT equivalent to unset (different config-file location -> fresh
+# onboarding), so we must unset, which also overrides any inherited value (e.g.
+# a Paseo daemon launched with CLAUDE_CONFIG_DIR set).
+acct=$("$SELF_DIR/claude-account-dir" "$PWD" 2>/dev/null | "$SELF_DIR/claude-pick-account" 2>/dev/null || true)
+if [ -n "${acct:-}" ] && [ "$acct" != "$HOME/.claude" ]; then
+  export CLAUDE_CONFIG_DIR="$acct"
+else
+  unset CLAUDE_CONFIG_DIR 2>/dev/null || true
+fi
+
+# Resolve the REAL claude: strip our own dir from PATH and look again, then fall
+# back to the known install path for minimal environments (e.g. a bare daemon).
+NEW_PATH=$(printf '%s' ":$PATH:" | sed "s|:$SELF_DIR:|:|g; s|^:||; s|:$||")
+REAL=$(PATH="$NEW_PATH" command -v claude 2>/dev/null || true)
+if [ -z "${REAL:-}" ] || [ ! -x "$REAL" ]; then
+  REAL="$HOME/.local/bin/claude"
+fi
+if [ ! -x "$REAL" ]; then
+  echo "claude shim: real claude binary not found (PATH minus $SELF_DIR, then ~/.local/bin/claude)" >&2
+  exit 127
+fi
+
+exec "$REAL" "$@"
