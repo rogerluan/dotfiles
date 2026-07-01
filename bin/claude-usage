@@ -21,10 +21,13 @@
 #   1) $CLAUDE_CODE_OAUTH_TOKEN                          (explicit override)
 #   2) a per-account token file: $CLAUDE_USAGE_TOKEN_FILE, else
 #      ~/.config/claude-accounts/<basename of CLAUDE_CONFIG_DIR>.token
-#      (a long-lived token from `claude setup-token` — the robust multi-account
-#       path, since macOS Keychain holds only ONE account's token at a time)
+#      (manual override — NOTE: a `claude setup-token` token does NOT work here,
+#       it lacks the `user:profile` scope this endpoint requires — use (4) instead)
 #   3) <CLAUDE_CONFIG_DIR>/.credentials.json            (Linux/Windows shape)
-#   4) macOS Keychain item "Claude Code-credentials"    (the default account)
+#   4) macOS Keychain — Claude Code namespaces one item per CLAUDE_CONFIG_DIR:
+#      the default ($HOME/.claude) uses "Claude Code-credentials" verbatim; any
+#      other config dir uses "Claude Code-credentials-<sha256(dir)[:8]>",
+#      populated the first time you interactively `/login` under that dir.
 
 set -eu
 
@@ -62,12 +65,15 @@ fi
 if [ -z "$TOKEN" ] && [ -f "$cfg_dir/.credentials.json" ]; then
   TOKEN=$(extract_token < "$cfg_dir/.credentials.json")
 fi
-# 4) macOS Keychain — ONLY for the default account. The Keychain holds a single
-#    "Claude Code-credentials" token (the default ~/.claude account), so using it
-#    for any other config dir would misattribute the default account's usage to
-#    that account. Non-default accounts must supply a token via (1)/(2)/(3).
-if [ -z "$TOKEN" ] && [ "$cfg_dir" = "$HOME/.claude" ] && command -v security >/dev/null 2>&1; then
-  TOKEN=$(security find-generic-password -s "Claude Code-credentials" -w 2>/dev/null | extract_token || true)
+# 4) macOS Keychain — per-config-dir item name (see note above).
+if [ -z "$TOKEN" ] && command -v security >/dev/null 2>&1; then
+  if [ "$cfg_dir" = "$HOME/.claude" ]; then
+    svc="Claude Code-credentials"
+  else
+    suffix=$(printf '%s' "$cfg_dir" | shasum -a 256 | cut -c1-8)
+    svc="Claude Code-credentials-$suffix"
+  fi
+  TOKEN=$(security find-generic-password -s "$svc" -w 2>/dev/null | extract_token || true)
 fi
 
 if [ -z "$TOKEN" ]; then

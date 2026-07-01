@@ -39,8 +39,10 @@ set +f
 
 [ -n "${1:-}" ] || exit 0
 
-# Usage-awareness off, or only one account in the pool: take the first.
-if [ "$USAGE_AWARE" != "1" ] || [ "$#" -le 1 ]; then
+# Usage-awareness off: take the first account, no check. (A single-account
+# pool still goes through the loop below — it must be able to report "over
+# threshold" so the caller falls back to the default account.)
+if [ "$USAGE_AWARE" != "1" ]; then
   printf '%s\n' "$1"
   exit 0
 fi
