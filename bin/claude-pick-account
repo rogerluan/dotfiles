@@ -3,11 +3,16 @@
 # stdin (best-first, one per line, from claude-account-dir), based on usage.
 #
 # Algorithm (walk the pool in order: account 1, then 2, …):
-#   • read the account's usage;
+#   • read the account's usage — fresh cache, else a live check, else fall back
+#     to a STALE cache entry if one exists (the usage endpoint has its own
+#     separate rate limit, independent of the account's real session limit —
+#     see claude-usage's header — so "the live check failed" is NOT the same
+#     as "we have no idea", if we checked recently);
 #   • if usage is AT/OVER the threshold  → skip to the next account;
 #   • the first account UNDER the threshold → choose it (print, stop);
-#   • if usage can't be read (no token / API error) → use it as-is (print, stop)
-#     — we can't prove it's over, so we don't skip it;
+#   • if usage TRULY can't be read (no cache at all, no token, first-ever
+#     check) → use it as-is (print, stop) — we can't prove it's over, so we
+#     don't skip it on a guess;
 #   • if every account is over the threshold → print nothing, so the caller
 #     leaves CLAUDE_CONFIG_DIR unset (the default account).
 #
@@ -56,28 +61,42 @@ choose() { printf '%s\n' "$1"; exit 0; }
 for d in "$@"; do
   cf="$CACHE/$(basename "$d")"
   line=""
+  stale=""
 
-  # Use a fresh cached usage line if we have one.
-  # Cache file format:  <unix-timestamp> five_hour=.. seven_day=.. max=..
+  # Read whatever's cached, fresh or not. Fresh (< TTL) is used directly below.
+  # Stale is kept as a fallback for when the live re-check fails — e.g. the
+  # usage endpoint has its OWN separate rate limit (see claude-usage's header),
+  # which concurrent launches across a team trip far more often than a per-launch
+  # network blip. Trusting a recent "this account is capped" reading over a
+  # failed re-check is what actually makes the fail-over usage-aware; silently
+  # discarding it (the previous behavior) meant one rate-limited usage check
+  # was enough to send every subsequent launch straight back onto a capped
+  # account until the real 429 test tripped mid-session.
   if [ -f "$cf" ]; then
     cts=$(cut -d' ' -f1 "$cf" 2>/dev/null || echo "")
     case "$cts" in
       ''|*[!0-9]*) : ;;
-      *) [ "$now" -gt 0 ] && [ $((now - cts)) -lt "$USAGE_CACHE_TTL" ] \
-           && line=$(cut -d' ' -f2- "$cf" 2>/dev/null) ;;
+      *) stale=$(cut -d' ' -f2- "$cf" 2>/dev/null)
+         [ "$now" -gt 0 ] && [ $((now - cts)) -lt "$USAGE_CACHE_TTL" ] && line=$stale ;;
     esac
   fi
 
-  # Cache miss → ask the usage API (short timeout so a hang can't block launch).
+  # Cache miss (or expired) → ask the usage API (short timeout so a hang can't
+  # block launch).
   if [ -z "$line" ]; then
-    line=$(CLAUDE_CONFIG_DIR="$d" CLAUDE_USAGE_MAX_TIME=5 "$SELF_DIR/claude-usage" 2>/dev/null || true)
-    case "$line" in
-      *=*) printf '%s %s\n' "$now" "$line" > "$cf" 2>/dev/null || true ;;
-      *) line="" ;;   # not a usage line → treat as unreadable
+    fresh=$(CLAUDE_CONFIG_DIR="$d" CLAUDE_USAGE_MAX_TIME=5 "$SELF_DIR/claude-usage" 2>/dev/null || true)
+    case "$fresh" in
+      *=*) line=$fresh; printf '%s %s\n' "$now" "$fresh" > "$cf" 2>/dev/null || true ;;
+      *) : ;;   # live check failed → fall back to the stale reading below
     esac
   fi
 
-  # Usage unreadable → use this account as-is (don't skip on a guess).
+  # Live check failed (or there was no fresh cache) but we have a stale reading
+  # on disk → trust it over blindly assuming the account is fine.
+  [ -n "$line" ] || line=$stale
+
+  # Truly no data at all (first-ever check, no token, empty cache) → can't
+  # prove it's over the threshold, so don't skip on a guess.
   [ -n "$line" ] || choose "$d"
 
   # Pull the configured window's percentage out of the usage line.
