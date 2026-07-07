@@ -101,11 +101,6 @@ if which unsetopt > /dev/null; then
   unsetopt nomatch
 fi
 
-# Mise - https://mise.jdx.dev
-if which ~/.local/bin/mise > /dev/null; then
-  eval "$(~/.local/bin/mise activate zsh)"
-fi
-
 # Set up fnm
 if which fnm > /dev/null; then
   eval "$(fnm env --use-on-cd --shell zsh)"
