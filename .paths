@@ -45,3 +45,6 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 # Personal bin — MUST be last so the `claude` account-selecting shim
 # (~/.dotfiles/bin/claude) shadows the real claude on PATH.
 export PATH="$HOME/.dotfiles/bin:$PATH"
+
+export ANDROID_HOME="$HOME/Library/Android/sdk"
+export PATH="$ANDROID_HOME/platform-tools:$PATH"
