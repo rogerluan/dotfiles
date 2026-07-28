@@ -125,11 +125,15 @@ function changelog() {
 # Generates a git changelog from the current directory from the parameter's tag to current HEAD.
 function changelog-md() {
   CHANGELOG=$(changelog $1)
-  # OPEN_PRS=$(gh pr list)
-
-  sed -E 's/#(\d*)/[#$1](https:\/\/github.com\/zillyinc\/tellus-ios\/pull\/$1)/gm' <<< $CHANGELOG
-
-  # sed -Ei "s/^([[:blank:]]*)(pod 'Reveal-SDK')/\1# \2/" Podfile
+  # Repo URL comes from the current repo's own remote, so this works anywhere
+  # and keeps employer repo names out of this file.
+  REPO_URL=$(git remote get-url origin 2>/dev/null \
+    | sed -E 's#(git@|https://)github\.com[:/]#https://github.com/#; s/\.git$//')
+  if [[ -z "$REPO_URL" ]]; then
+    echo "$CHANGELOG"
+    return
+  fi
+  sed -E "s#\#([0-9]+)#[#\1]($REPO_URL/pull/\1)#g" <<< "$CHANGELOG"
 }
 
 alias cl=changelog
