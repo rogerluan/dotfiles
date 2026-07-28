@@ -36,7 +36,7 @@ echo "Fetch everything from '$BASE_REPO_SLUG'"
 git fetch upstream
 
 echo "Checking out to '$FORK_BRANCH', the branch that needs to be updated"
-git checkout $FORK_BRANCH
+git checkout -B "$FORK_BRANCH" "origin/$FORK_BRANCH"
 
 echo "Merging $BASE_REPO_SLUG:master into $FORK_AND_BRANCH"
 git merge upstream/master -m "Merge $BASE_REPO_SLUG:master into $FORK_AND_BRANCH"
