@@ -1,35 +1,113 @@
 #!/bin/sh
 # claude — per-project account-selecting shim for Claude Code.
 #
-# At launch it picks the right CLAUDE_CONFIG_DIR for the current directory (by
-# the repo's GitHub org, via claude-account-dir + claude-pick-account) and execs
-# the real `claude`. Because it runs at LAUNCH in the process's own cwd, it covers
-# BOTH contexts that bypass the interactive shell's chpwd hook:
-#   - your terminal (this dir is first on PATH), and
-#   - Paseo agents/terminals, which spawn `claude` directly with cwd = the
-#     worktree (a random-slug folder) and no .zshrc / chpwd at all.
-#
-# It is authoritative: it always sets CLAUDE_CONFIG_DIR from the cwd, overriding
-# any inherited value (e.g. a Paseo daemon launched with a global
-# CLAUDE_CONFIG_DIR). To change the mapping, edit claude-account-dir.
+# Runs at LAUNCH in the process's own cwd, so it covers both the interactive
+# shell and agent runners that spawn `claude` directly with no .zshrc and no
+# chpwd hook. It is authoritative: it always recomputes CLAUDE_CONFIG_DIR from
+# the cwd and discards any inherited value, since an inherited one is usually a
+# stale global from whatever launched the daemon.
 
 set -eu
 SELF_DIR=$(cd "$(dirname "$0")" && pwd)
 
-# Pick the account for this directory. Empty (or the default ~/.claude) means
-# "use Claude's default account" -> UNSET CLAUDE_CONFIG_DIR. Setting it to
-# ~/.claude is NOT equivalent to unset (different config-file location -> fresh
-# onboarding), so we must unset, which also overrides any inherited value (e.g.
-# a Paseo daemon launched with CLAUDE_CONFIG_DIR set).
-acct=$("$SELF_DIR/claude-account-dir" "$PWD" 2>/dev/null | "$SELF_DIR/claude-pick-account" 2>/dev/null || true)
-if [ -n "${acct:-}" ] && [ "$acct" != "$HOME/.claude" ]; then
-  export CLAUDE_CONFIG_DIR="$acct"
+load_conf() {
+  [ -f "$SELF_DIR/claude-accounts.conf" ] && . "$SELF_DIR/claude-accounts.conf"
+  priv=${XDG_CONFIG_HOME:-$HOME/.config}/claude-accounts/accounts.conf
+  [ -f "$priv" ] && . "$priv"
+  return 0
+}
+
+# CLAUDE_ACCOUNT_LOGIN=<dir>|default runs one session against a named slot,
+# skipping selection and the guard. It exists because the shim is authoritative:
+# a bare `CLAUDE_CONFIG_DIR=... claude` from an unrelated directory is silently
+# discarded, and the login lands in the default slot — the exact accident this
+# whole mechanism prevents. `default` rather than "$HOME/.claude" because the
+# default account requires CLAUDE_CONFIG_DIR to be UNSET; pointing it at
+# ~/.claude selects a different config-file location and re-onboards.
+if [ -n "${CLAUDE_ACCOUNT_LOGIN:-}" ]; then
+  case "$CLAUDE_ACCOUNT_LOGIN" in
+    default|"$HOME/.claude")
+      unset CLAUDE_CONFIG_DIR 2>/dev/null || true ;;
+    *)
+      [ -d "$CLAUDE_ACCOUNT_LOGIN" ] || {
+        echo "claude: CLAUDE_ACCOUNT_LOGIN='$CLAUDE_ACCOUNT_LOGIN' is not a directory" >&2
+        exit 78
+      }
+      export CLAUDE_CONFIG_DIR="$CLAUDE_ACCOUNT_LOGIN" ;;
+  esac
+  CLAUDE_ACCOUNT_GUARD=0
 else
-  unset CLAUDE_CONFIG_DIR 2>/dev/null || true
+  # A non-empty pool means this repo belongs to an org we hold accounts for, and
+  # the session must stay inside that pool. Empty means unset — not ~/.claude,
+  # which is a different config-file location.
+  pool=$("$SELF_DIR/claude-account-dir" "$PWD" 2>/dev/null || true)
+  acct=""
+  [ -n "${pool:-}" ] && acct=$(printf '%s\n' "$pool" | "$SELF_DIR/claude-pick-account" 2>/dev/null || true)
+  if [ -n "${acct:-}" ] && [ "$acct" != "$HOME/.claude" ]; then
+    export CLAUDE_CONFIG_DIR="$acct"
+  else
+    unset CLAUDE_CONFIG_DIR 2>/dev/null || true
+  fi
 fi
 
-# Resolve the REAL claude: strip our own dir from PATH and look again, then fall
-# back to the known install path for minimal environments (e.g. a bare daemon).
+IDENTITY_GUARD=1
+ANNOUNCE_ACCOUNT=1
+load_conf
+
+slot=${CLAUDE_CONFIG_DIR:-$HOME/.claude}
+if [ "$slot" = "$HOME/.claude" ]; then
+  key=default
+  login_arg=default
+else
+  key=$(printf '%s' "$(basename "$slot")" | sed 's/^\.//' | tr -C 'A-Za-z0-9' '_')
+  login_arg=$slot
+fi
+expected=$(eval "printf '%s' \"\${ACCOUNT_UUID_$key:-}\"")
+label=$(eval "printf '%s' \"\${ACCOUNT_LABEL_$key:-}\"")
+[ -n "$label" ] || label="(no label configured for $key)"
+
+# Resolved once for both checks below; cached against the credential's own
+# fingerprint, so a repeat launch costs no API call. The exit code carries the
+# part that matters: 2 = no credential, 4 = credential rejected, 3 = unknown.
+rc=0
+actual=$(CLAUDE_CONFIG_DIR="$slot" "$SELF_DIR/claude-whoami" --uuid 2>/dev/null) || rc=$?
+
+# Picking the right config DIR is not the same as that dir holding the right
+# ACCOUNT, and `/login` binds a slot to whoever answered the prompt. Refuse only
+# on a mismatch we are sure of — no pin, no credential yet, or an unreachable API
+# all mean "unknown", and the guard must never be the reason a login can't happen.
+if [ "${CLAUDE_ACCOUNT_GUARD:-1}" = "1" ] && [ "${IDENTITY_GUARD:-1}" = "1" ] \
+   && [ -n "$expected" ] && [ -n "$actual" ] && [ "$actual" != "$expected" ]; then
+  actual_org=$(CLAUDE_CONFIG_DIR="$slot" "$SELF_DIR/claude-whoami" --org 2>/dev/null || true)
+  cat >&2 <<EOF
+claude: REFUSING TO LAUNCH — wrong account in this slot.
+
+  directory : $PWD
+  slot      : $slot
+  expected  : $label
+  found     : $actual_org
+
+A /login while this slot was active captured it. Re-login with:
+
+  CLAUDE_ACCOUNT_LOGIN=$login_arg claude
+
+That exact form is the only one that targets a slot; a bare CLAUDE_CONFIG_DIR is
+recomputed from the current directory and ignored.
+EOF
+  exit 78
+fi
+
+# The guard only runs at launch, but Claude Code can also prompt for re-auth
+# mid-session, and that prompt says nothing about which account it wants.
+if [ "${ANNOUNCE_ACCOUNT:-1}" = "1" ]; then
+  case "$rc" in
+    2|4) printf 'claude: %s needs a login — use %s\n' "$slot" "$label" >&2 ;;
+    *)   printf 'claude: %s · %s\n' "$slot" "$label" >&2 ;;
+  esac
+fi
+
+# Resolve the REAL claude: drop our own dir from PATH, then fall back to the
+# known install path for minimal environments such as a bare daemon.
 NEW_PATH=$(printf '%s' ":$PATH:" | sed "s|:$SELF_DIR:|:|g; s|^:||; s|:$||")
 REAL=$(PATH="$NEW_PATH" command -v claude 2>/dev/null || true)
 if [ -z "${REAL:-}" ] || [ ! -x "$REAL" ]; then

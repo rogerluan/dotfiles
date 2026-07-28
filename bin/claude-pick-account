@@ -2,46 +2,26 @@
 # claude-pick-account — choose ONE CLAUDE_CONFIG_DIR from the candidate pool on
 # stdin (best-first, one per line, from claude-account-dir), based on usage.
 #
-# Algorithm (walk the pool in order: account 1, then 2, …):
-#   • read the account's usage — fresh cache, else a live check, else fall back
-#     to a RECENT stale cache entry if one exists (the usage endpoint has its
-#     own separate rate limit, independent of the account's real session limit —
-#     see claude-usage's header — so "the live check failed" is NOT the same
-#     as "we have no idea", if we checked recently). "Recent" is bounded by
-#     USAGE_STALE_MAX: beyond that the reading is treated as no-data, because
-#     an over-threshold reading that can never be re-verified would otherwise
-#     blackhole the account FOREVER — skipping it means no session ever runs
-#     under its config dir, so its OAuth token is never refreshed, so every
-#     live check 401s, so the stale "capped" reading is trusted again… while
-#     the real limit (5h window!) reset long ago;
-#   • if usage is AT/OVER the threshold  → skip to the next account;
-#   • the first account UNDER the threshold → choose it (print, stop);
-#   • if usage TRULY can't be read (no cache at all, no token, first-ever
-#     check) → use it as-is (print, stop) — we can't prove it's over, so we
-#     don't skip it on a guess;
-#   • if every account is over the threshold → print nothing, so the caller
-#     leaves CLAUDE_CONFIG_DIR unset (the default account).
-#
-# ALL the tunable levers (on/off, threshold, which usage window, cache TTL) live
-# in ./claude-accounts.conf — edit THAT file, not this script.
+# Never skips an account on a guess: if usage truly can't be read, the account is
+# used as-is. The levers live in claude-accounts.conf.
 
 set -eu
 SELF_DIR=$(cd "$(dirname "$0")" && pwd)
 CACHE=${XDG_CACHE_HOME:-$HOME/.cache}/claude-usage
 
-# ── Levers: built-in defaults, overridden by claude-accounts.conf ────────────
 USAGE_AWARE=1
 USAGE_THRESHOLD=95
 USAGE_METRIC=max
 USAGE_CACHE_TTL=600
 USAGE_STALE_MAX=3600
+ORG_FALLBACK_DEFAULT=0
 [ -f "$SELF_DIR/claude-accounts.conf" ] && . "$SELF_DIR/claude-accounts.conf"
-# ─────────────────────────────────────────────────────────────────────────────
+priv=${XDG_CONFIG_HOME:-$HOME/.config}/claude-accounts/accounts.conf
+[ -f "$priv" ] && . "$priv"
 
 input=$(cat)
 [ -n "$input" ] || exit 0
 
-# Split stdin (newline-separated) into positional params, no globbing.
 set -f
 IFS='
 '
@@ -51,9 +31,8 @@ set +f
 
 [ -n "${1:-}" ] || exit 0
 
-# Usage-awareness off: take the first account, no check. (A single-account
-# pool still goes through the loop below — it must be able to report "over
-# threshold" so the caller falls back to the default account.)
+# A single-account pool still goes through the loop below, so it can report
+# "over threshold" to the caller.
 if [ "$USAGE_AWARE" != "1" ]; then
   printf '%s\n' "$1"
   exit 0
@@ -62,32 +41,20 @@ fi
 mkdir -p "$CACHE" 2>/dev/null || true
 now=$(date +%s 2>/dev/null || echo 0)
 
-# Echo the chosen account and stop the whole script.
 choose() { printf '%s\n' "$1"; exit 0; }
 
+last=""
 for d in "$@"; do
+  last=$d
   cf="$CACHE/$(basename "$d")"
   line=""
   stale=""
 
-  # Read whatever's cached, fresh or not. Fresh (< TTL) is used directly below.
-  # Stale is kept as a fallback for when the live re-check fails — e.g. the
-  # usage endpoint has its OWN separate rate limit (see claude-usage's header),
-  # which concurrent launches across a team trip far more often than a per-launch
-  # network blip. Trusting a recent "this account is capped" reading over a
-  # failed re-check is what actually makes the fail-over usage-aware; silently
-  # discarding it (the previous behavior) meant one rate-limited usage check
-  # was enough to send every subsequent launch straight back onto a capped
-  # account until the real 429 test tripped mid-session.
-  #
-  # But that trust MUST expire (USAGE_STALE_MAX). If the live check fails for
-  # a reason that never goes away on its own — an expired OAuth token, which
-  # only refreshes when a session actually runs under that config dir — an
-  # unbounded stale "capped" reading deadlocks the account out of the pool
-  # permanently (skipped → never launched → token never refreshed → check
-  # keeps failing → stale reading trusted again). Past the bound we treat it
-  # as no-data and use the account as-is, same as the no-cache case: launching
-  # under it is exactly what refreshes the token and self-heals the loop.
+  # A stale reading is kept as a fallback for when the live re-check fails. The
+  # usage endpoint has its own rate limit, separate from the account's session
+  # limit, so "the check failed" is not the same as "we have no idea" — and
+  # discarding a recent "this account is capped" on a failed re-check is what
+  # sends every launch straight back onto a capped account.
   if [ -f "$cf" ]; then
     cts=$(cut -d' ' -f1 "$cf" 2>/dev/null || echo "")
     case "$cts" in
@@ -100,34 +67,32 @@ for d in "$@"; do
     esac
   fi
 
-  # Cache miss (or expired) → ask the usage API (short timeout so a hang can't
-  # block launch).
+  # Short timeout so a hang can't block launch.
   if [ -z "$line" ]; then
     fresh=$(CLAUDE_CONFIG_DIR="$d" CLAUDE_USAGE_MAX_TIME=5 "$SELF_DIR/claude-usage" 2>/dev/null || true)
     case "$fresh" in
       *=*) line=$fresh; printf '%s %s\n' "$now" "$fresh" > "$cf" 2>/dev/null || true ;;
-      *) : ;;   # live check failed → fall back to the stale reading below
+      *) : ;;
     esac
   fi
 
-  # Live check failed (or there was no fresh cache) but we have a stale reading
-  # on disk → trust it over blindly assuming the account is fine.
   [ -n "$line" ] || line=$stale
-
-  # Truly no data at all (first-ever check, no token, empty cache) → can't
-  # prove it's over the threshold, so don't skip on a guess.
   [ -n "$line" ] || choose "$d"
 
-  # Pull the configured window's percentage out of the usage line.
   util=$(printf '%s' "$line" | sed -n "s/.*$USAGE_METRIC=\([0-9.]*\).*/\1/p")
-  [ -n "$util" ] || choose "$d"   # window missing → use as-is
+  [ -n "$util" ] || choose "$d"
 
-  # Under threshold → stay here. Otherwise fall through to the next account.
   if awk "BEGIN{exit !($util < $USAGE_THRESHOLD)}" 2>/dev/null; then
     choose "$d"
   fi
 done
 
-# Every account in the pool was over the threshold → print nothing → the caller
-# unsets CLAUDE_CONFIG_DIR and falls back to the default account.
+# Whole pool over threshold. Handing back the last account keeps the session
+# inside the org: it may be capped, but Claude Code says so and that is
+# recoverable, whereas escaping to the default account lets the next /login bind
+# the global slot to a work identity. See ORG_FALLBACK_DEFAULT.
+if [ "$ORG_FALLBACK_DEFAULT" = "1" ]; then
+  exit 0
+fi
+[ -n "$last" ] && printf '%s\n' "$last"
 exit 0

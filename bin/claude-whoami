@@ -1,0 +1,140 @@
+#!/bin/sh
+# claude-whoami — print which account a CLAUDE_CONFIG_DIR is authenticated as,
+# via the OAuth profile endpoint. Output: uuid=<uuid> org=<organization name>.
+#   --uuid / --org   print just that field
+#
+# Exit 0 known, 2 no credential, 4 credential rejected (401/403), 3 couldn't
+# tell. 2 and 4 both mean a login prompt is coming; 3 must NOT be read as
+# logged-out, or a flaky network starts crying wolf.
+#
+# Exists because the account uuid is the only trustworthy identity for a slot:
+# <CLAUDE_CONFIG_DIR>/.claude.json's oauthAccount block is rewritten only when a
+# session fetches a profile, so after a fresh /login it still describes the
+# previous account. The Keychain item is the source of truth, and this asks the
+# API who that credential belongs to. Never prints token material.
+#
+# Cached against a fingerprint of the credential itself rather than a TTL:
+# identity can only change when the credential changes, so a re-login invalidates
+# it immediately and an unchanged credential never costs an API call.
+#
+# Token resolution mirrors claude-usage.
+
+set -eu
+
+want=full
+case "${1:-}" in
+  --uuid) want=uuid ;;
+  --org)  want=org ;;
+  '')     ;;
+  *)      echo "usage: claude-whoami [--uuid|--org]" >&2; exit 64 ;;
+esac
+
+cfg_dir=${CLAUDE_CONFIG_DIR:-$HOME/.claude}
+acct_name=$(basename "$cfg_dir")
+CACHE=${XDG_CACHE_HOME:-$HOME/.cache}/claude-identity
+cf="$CACHE/$acct_name"
+ver=${CLAUDE_USAGE_UA_VERSION:-2.1.0}
+max_time=${CLAUDE_USAGE_MAX_TIME:-10}
+
+# The default config dir uses the bare service name; every other dir is
+# namespaced by sha256(dir)[:8].
+if [ "$cfg_dir" = "$HOME/.claude" ]; then
+  svc="Claude Code-credentials"
+else
+  svc="Claude Code-credentials-$(printf '%s' "$cfg_dir" | shasum -a 256 | cut -c1-8)"
+fi
+
+emit() {
+  case "$want" in
+    uuid) printf '%s\n' "$1" | sed -n 's/^uuid=\([^ ]*\).*/\1/p' ;;
+    org)  printf '%s\n' "$1" | sed -n 's/.* org=//p' ;;
+    *)    printf '%s\n' "$1" ;;
+  esac
+  exit 0
+}
+
+# Without -w, `security` prints metadata only, no secret. Hex digits cannot
+# contain 'Z', so the pattern can't match the 0x… blob on the same line.
+fp=""
+if [ -f "$cfg_dir/.credentials.json" ]; then
+  fp=$(stat -f %m "$cfg_dir/.credentials.json" 2>/dev/null \
+       || stat -c %Y "$cfg_dir/.credentials.json" 2>/dev/null || echo "")
+elif command -v security >/dev/null 2>&1; then
+  fp=$(security find-generic-password -s "$svc" 2>/dev/null \
+       | grep '"mdat"' | grep -o '[0-9]\{14\}Z' | head -1 || true)
+fi
+
+if [ -n "$fp" ] && [ -f "$cf" ]; then
+  cached=$(cat "$cf" 2>/dev/null || true)
+  case "$cached" in
+    "$fp uuid="*) emit "${cached#"$fp "}" ;;
+  esac
+fi
+
+extract_token() {
+  python3 -c "import sys,json
+try:
+    d=json.load(sys.stdin); o=d.get('claudeAiOauth',d)
+    print(o.get('accessToken') or o.get('access_token') or '')
+except Exception: print('')" 2>/dev/null
+}
+
+TOKEN=""
+if [ -n "${CLAUDE_CODE_OAUTH_TOKEN:-}" ]; then
+  TOKEN=$CLAUDE_CODE_OAUTH_TOKEN
+fi
+if [ -z "$TOKEN" ]; then
+  tf=${CLAUDE_USAGE_TOKEN_FILE:-"$HOME/.config/claude-accounts/$acct_name.token"}
+  [ -f "$tf" ] && TOKEN=$(tr -d ' \t\r\n' < "$tf")
+fi
+if [ -z "$TOKEN" ] && [ -f "$cfg_dir/.credentials.json" ]; then
+  TOKEN=$(extract_token < "$cfg_dir/.credentials.json")
+fi
+if [ -z "$TOKEN" ] && command -v security >/dev/null 2>&1; then
+  TOKEN=$(security find-generic-password -s "$svc" -w 2>/dev/null | extract_token || true)
+fi
+
+if [ -z "$TOKEN" ]; then
+  echo "claude-whoami: no OAuth token for account '$acct_name' (cfg: $cfg_dir)" >&2
+  exit 2
+fi
+
+raw=$(curl -s -w '\n%{http_code}' --max-time "$max_time" https://api.anthropic.com/api/oauth/profile \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "anthropic-beta: oauth-2025-04-20" \
+  -H "User-Agent: claude-code/$ver" \
+  -H "Content-Type: application/json" 2>/dev/null || true)
+
+code=$(printf '%s\n' "$raw" | tail -1)
+resp=$(printf '%s\n' "$raw" | sed '$d')
+
+case "$code" in
+  401|403)
+    echo "claude-whoami: credential rejected ($code) for '$acct_name' — needs re-login" >&2
+    exit 4 ;;
+esac
+[ -n "$resp" ] || { echo "claude-whoami: empty response" >&2; exit 3; }
+[ "$code" = "200" ] || { echo "claude-whoami: HTTP $code" >&2; exit 3; }
+
+line=$(printf '%s' "$resp" | python3 -c "import sys,json
+try:
+    d=json.load(sys.stdin)
+except Exception:
+    sys.stderr.write('claude-whoami: non-JSON response\n'); sys.exit(3)
+if isinstance(d,dict) and d.get('error'):
+    sys.stderr.write('claude-whoami: API error: %s\n' % json.dumps(d['error'])); sys.exit(3)
+a = d.get('account') or {}
+o = d.get('organization') or {}
+u = a.get('uuid') or ''
+if not u:
+    sys.stderr.write('claude-whoami: response has no account uuid\n'); sys.exit(3)
+print('uuid=%s org=%s' % (u, o.get('name') or '?'))") || exit 3
+
+[ -n "$line" ] || exit 3
+
+if [ -n "$fp" ]; then
+  mkdir -p "$CACHE" 2>/dev/null || true
+  printf '%s %s\n' "$fp" "$line" > "$cf" 2>/dev/null || true
+fi
+
+emit "$line"

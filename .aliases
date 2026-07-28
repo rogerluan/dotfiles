@@ -202,19 +202,13 @@ function git_commit_backfill() {
 ################################################################################
 # Claude Code — per-project account selection
 ################################################################################
-# A repo's GitHub org picks the Claude account: config dirs named
-# ~/.claude-<org>-<N> are that org's account pool; anything else uses the default
-# ~/.claude (personal). Identity is the org, NOT the on-disk path — resolved by
-# ~/.dotfiles/bin/claude-account-dir — so it survives random-slug worktrees
-# (Paseo, `git worktree`): a worktree shares its source repo's git config. This
-# chpwd hook keeps the SHELL env correct; the authoritative pick at launch is the
-# ~/.dotfiles/bin/claude shim (which also covers contexts this hook can't reach,
-# e.g. Paseo spawning claude with no .zshrc). Both read the same
-# claude-account-dir, so they agree. Empty result ⇒ leave CLAUDE_CONFIG_DIR UNSET
-# (≠ ~/.claude, which is a different config path that re-onboards).
+# Keeps the SHELL env pointing at the right account dir as you cd around. The
+# authoritative pick happens at launch in ~/.dotfiles/bin/claude, which also
+# covers agent runners that never load a shell — so this hook deliberately skips
+# the usage check the shim does, to keep cd instant. Expect the two to disagree
+# when an account is over its limit; the shim wins.
 function _claude_config_dir_switch() {
-  # Only manage our own values (default, or a ~/.claude-* pool dir); respect
-  # anything else set by hand.
+  # Respect a value set by hand; only manage our own.
   case "${CLAUDE_CONFIG_DIR:-}" in
     ""|"$HOME/.claude"|"$HOME/.claude-"*) ;;
     *) return ;;
