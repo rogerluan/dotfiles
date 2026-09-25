@@ -94,9 +94,14 @@ defaults write -g NSAutomaticSpellingCorrectionEnabled -bool false
 # Disables automatic text completion
 defaults write -g NSAutomaticTextCompletionEnabled -bool false
 
-# Set a blazingly fast keyboard repeat rate (even faster than max values via UI)
+# Set a blazingly fast keyboard repeat rate (even faster than max values via UI).
+# Values are in 1/60s frames: KeyRepeat 1 = 16.67ms between repeats, InitialKeyRepeat 10 = 166.67ms before repeating.
 defaults write -g KeyRepeat -int 1
 defaults write -g InitialKeyRepeat -int 10
+# Since macOS Ventura these are mirrored in com.apple.Accessibility (in seconds), and *that* domain wins
+# whenever it exists, silently ignoring the -g values above. Keep the two in sync.
+defaults write com.apple.Accessibility KeyRepeatInterval -float 0.016666666
+defaults write com.apple.Accessibility KeyRepeatDelay -float 0.166666666
 
 # Enable press and hold for all keys. Requires a reboot to take affect.
 defaults write -g ApplePressAndHoldEnabled -bool false
