@@ -4,7 +4,7 @@
 # - Telegram settings
 # - Which icons shows on menu bar (sound, wifi, bluetooth)
 # - Toggl
-# - Zoom
+# - Zoom: audio/video/meeting preferences (see the Zoom section for why)
 # - Set up the Side Bar with the right apps
 # - Set up Finder side menu folders (remove tags, add all the folders)
 # - Set up the gesture where drag down 3 windows to open all related windows
@@ -13,14 +13,8 @@
 #     - Show sound on status bar **ALWAYS**
 #     - Show battery percentage in menu bar
 #     - Hide the Now Playing in menu bar
-# - Safari:
-#    "Safari Opens With all windows from last session"
-#    "New windows open with empty page"
-#    "new tabs open with empty page"
-#    "Show full website"
-#    Remove history manually
-#    Show develop menu in menu bar
-#    untick using information from my contacts
+# - Safari: remove history manually (no `defaults` key for it — Safari keeps
+#   history in its own container database, not in preferences)
 # - Xcode navigator size small, general tab
 
 ################################################################################
@@ -46,6 +40,10 @@ osascript -e 'tell application "System Preferences" to quit'
 osascript -e 'tell app "Xcode" to quit'
 osascript -e 'tell app "SizeUp" to quit'
 osascript -e 'tell app "SourceTree" to quit'
+osascript -e 'tell app "zoom.us" to quit'
+# Safari rewrites its container plist when it exits, clobbering anything written
+# underneath it, so it has to be down before the Safari section runs.
+osascript -e 'tell app "Safari" to quit'
 
 # Ask for the administrator password upfront
 sudo -v
@@ -347,14 +345,102 @@ defaults write com.apple.dock show-recents -bool false
 # Safari                                                                       #
 ################################################################################
 
-# Show the full URL in the address bar (note: this still hides the scheme)
-defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool true
+# Safari is sandboxed, so this section had silently done nothing for years.
+# Its preferences are NOT in ~/Library/Preferences/com.apple.Safari.plist — that
+# file does not exist at all. The real store is inside the app container:
+#   ~/Library/Containers/com.apple.Safari/Data/Library/Preferences/com.apple.Safari.plist
+# cfprefsd redirects `defaults … com.apple.Safari` there, but only for a process
+# holding Full Disk Access. Without FDA the writes are accepted and dropped on
+# the floor — no error, no effect. Grant it to whichever terminal runs this in
+# System Settings ▸ Privacy & Security ▸ Full Disk Access.
+#
+# Every key below was verified against macOS 26.3 (Safari 26): each one is
+# either present in the live container plist or referenced by the Safari
+# binaries in the dyld shared cache. Keys that Apple has since removed —
+# ShowFavoritesBar, SendDoNotTrackHTTPHeader — are deliberately not here.
 
-# Set Safari’s home page to `about:blank` for faster loading
-defaults write com.apple.Safari HomePage -string "about:blank"
+# Probe the container with a throwaway key first, so a missing Full Disk Access
+# grant is reported instead of producing a section that appears to succeed.
+if defaults write com.apple.Safari DotfilesWriteProbe -bool true 2>/dev/null \
+  && defaults read com.apple.Safari DotfilesWriteProbe &>/dev/null; then
+  defaults delete com.apple.Safari DotfilesWriteProbe
+  SAFARI_PREFS_WRITABLE=true
+else
+  SAFARI_PREFS_WRITABLE=false
+  echo "WARNING: Safari preferences are not writable — grant Full Disk Access to this terminal in System Settings ▸ Privacy & Security ▸ Full Disk Access, then re-run. Skipping the Safari section." >&2
+fi
 
-# Disable auto-correct
-defaults write com.apple.Safari WebAutomaticSpellingCorrectionEnabled -bool false
+if [ "$SAFARI_PREFS_WRITABLE" = true ]; then
+
+  # --- General ---------------------------------------------------------------
+
+  # "Safari opens with: All windows from last session"
+  defaults write com.apple.Safari AlwaysRestoreSessionAtLaunch -bool true
+  defaults write com.apple.Safari ExcludePrivateWindowWhenRestoringSessionAtLaunch -bool false
+  defaults write com.apple.Safari OpenPrivateWindowWhenNotRestoringSessionAtLaunch -bool false
+
+  # "New windows open with: Empty Page" / "New tabs open with: Empty Page".
+  # These are popup indices, not booleans, and Apple has reshuffled them between
+  # releases — so rather than trusting a constant from some old gist, 1 is the
+  # value read back out of a Safari that was set to Empty Page by hand in the UI
+  # on macOS 26.3. Re-check it after a major Safari upgrade.
+  defaults write com.apple.Safari NewWindowBehavior -int 1
+  defaults write com.apple.Safari NewTabBehavior -int 1
+
+  # Home page. Mostly cosmetic while the two settings above are Empty Page, but it
+  # is still what the Home button and ⌘⇧H load.
+  defaults write com.apple.Safari HomePage -string "about:blank"
+
+  # "Show full website address" (still hides the scheme)
+  defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool true
+
+  # --- AutoFill --------------------------------------------------------------
+
+  # AutoFill ▸ "Using information from my contacts", off
+  defaults write com.apple.Safari AutoFillFromAddressBook -bool false
+
+  # --- Security & Privacy ----------------------------------------------------
+
+  # Require Touch ID / password to unlock Private Browsing windows
+  defaults write com.apple.Safari PrivateBrowsingRequiresAuthentication -bool true
+
+  # --- Appearance ------------------------------------------------------------
+
+  # No sidebar on the start page
+  defaults write com.apple.Safari ShowSidebarInTopSites -bool false
+
+  # --- Advanced --------------------------------------------------------------
+
+  # Show the Develop menu in the menu bar. IncludeDevelopMenu is Safari's own key;
+  # WebKitDeveloperExtras is what enables the web inspector in other WebKit hosts.
+  defaults write com.apple.Safari IncludeDevelopMenu -bool true
+  defaults write com.apple.Safari WebKitDeveloperExtras -bool true
+  defaults write -g WebKitDeveloperExtras -bool true
+
+  # No custom user stylesheet
+  defaults write com.apple.Safari UserStyleSheetEnabled -bool false
+
+  # Disable auto-correct while typing in web pages
+  defaults write com.apple.Safari WebAutomaticSpellingCorrectionEnabled -bool false
+
+  # --- Opt-in ----------------------------------------------------------------
+  # Verified to be real keys on Safari 26, but each one changes behaviour away
+  # from how this Mac is currently set up, so they are left for you to choose.
+  #
+  # Let Safari act as the password / credit-card manager, and fill other forms:
+  # defaults write com.apple.Safari AutoFillPasswords -bool false
+  # defaults write com.apple.Safari AutoFillCreditCardData -bool false
+  # defaults write com.apple.Safari AutoFillMiscellaneousForms -bool false
+  #
+  # Don't auto-open "safe" downloads (archives, PDFs, images) after downloading:
+  # defaults write com.apple.Safari AutoOpenSafeDownloads -bool false
+  #
+  # Warn when visiting a fraudulent website:
+  # defaults write com.apple.Safari WarnAboutFraudulentWebsites -bool true
+  #
+  # Show the status bar, i.e. the link target on hover:
+  # defaults write com.apple.Safari ShowOverlayStatusBar -bool true
+fi
 
 ################################################################################
 # Terminal                                                                     #
@@ -493,6 +579,57 @@ defaults write com.torusknot.SourceTreeNotMAS bookmarksWindowOpen -bool false
 defaults write ru.keepcoder.Telegram NSNavLastRootDirectory -string "~/Downloads"
 defaults write ru.keepcoder.Telegram kForceTouchAction -int 1
 defaults write ru.keepcoder.Telegram kAutomaticConvertEmojiesType2 -bool true
+
+################################################################################
+# Zoom                                                                         #
+################################################################################
+
+# Everything in Zoom's Settings window (audio, video, meeting behavior, etc.) is
+# stored in the encrypted ~/Library/Application Support/zoom.us/data/zoomus.enc.db,
+# which can't be written from here. What Zoom does offer is the IT admin config
+# at /Library/Preferences/us.zoom.config.plist. Keys under `PackageRecommend` are
+# applied as defaults that can still be changed in the app; keys outside of it
+# would be enforced and greyed out. Key reference:
+# https://support.zoom.com/hc/en/article?id=zm_kb&sysparm_article=KB0064957
+# There's no documented key for "Always display participant names on their video".
+sudo defaults write /Library/Preferences/us.zoom.config PackageRecommend '
+<dict>
+    <!-- Always show video preview dialog when joining a video meeting -->
+    <key>AlwaysShowVideoPreviewDialog</key><true/>
+    <!-- Stop my video when joining a meeting -->
+    <key>zDisableVideo</key><true/>
+    <!-- Mute my mic when joining a meeting -->
+    <key>MuteVoipWhenJoin</key><true/>
+    <!-- Automatically join audio by computer when joining a meeting -->
+    <key>zAutoJoinVoip</key><true/>
+    <!-- Always show meeting controls -->
+    <key>AutoHideToolBar</key><false/>
+</dict>'
+
+# Only a handful of Zoom's other settings live in regular plists:
+
+# Disable spelling correction, spell checking and grammar checking in chat
+defaults write us.zoom.xos ZMInputTextViewAutomaticSpellingCorrectionEnabled -bool false
+defaults write us.zoom.xos ZMInputTextViewContinuousSpellCheckingEnabled -bool false
+defaults write us.zoom.xos ZMInputTextViewGrammarCheckingEnabled -bool false
+
+# Hide the chat window when taking a screenshot
+defaults write us.zoom.xos kCaptureWithoutChatWindow -bool true
+
+# Use the system language
+defaults write us.zoom.xos "User Select Language Identify" -string "follow system language"
+
+# Favorite reactions
+defaults write us.zoom.xos default_favoriteArrayV4 -array "😂" "😃"
+
+# Enable the global shortcut to show/hide the floating meeting controls
+defaults write us.zoom.xos.Hotkey "[gHK@state]-HotkeyShowHideFitbar" -bool true
+
+# Dock the floating meeting controls
+defaults write ZoomChat ZoomFitDock -string "true"
+
+# Remember the phone number used for phone audio
+defaults write ZoomChat ZoomRememberPhoneKey -string "true"
 
 ################################################################################
 # MiddleClick                                                                   #
