@@ -1,3 +1,7 @@
+# The following lines were added by Docker Desktop to add commands to your PATH.
+export PATH="$PATH:/Users/rogerluan/.docker/bin"
+# End of Docker Desktop section.
+
 # .zprofile — sourced for LOGIN shells, AFTER the system /etc/zprofile.
 #
 # macOS's /etc/zprofile runs `path_helper`, which REBUILDS $PATH and moves the
