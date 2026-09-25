@@ -1,19 +1,50 @@
-export PATH="$HOME/.rbenv/shims:$PATH"
-export PATH="$HOME/.rbenv/bin:$PATH"
+# .paths — everything that manipulates $PATH, in one place.
+#
+# This file is sourced repeatedly: by .zshenv (every shell), .zprofile (login
+# shells, after macOS's path_helper) and .zshrc (interactive shells), plus by
+# the set_up_*.sh scripts under bash. Two consequences drive its shape:
+#
+#   1. Every entry is prepended, so re-sourcing would grow $PATH without bound.
+#      `dedupe_path` at the bottom collapses repeats, keeping the FIRST
+#      occurrence of each so precedence is preserved.
+#   2. Order matters, and the ONE non-obvious rule is that `brew shellenv` must
+#      come first — see the Homebrew block below.
+#
+# Entries below are listed lowest-precedence FIRST (each line prepends, so the
+# LAST line wins).
 
-# pyenv shims. Sourced via .zshenv → runs for EVERY shell, before oh-my-zsh
-# loads, so the oh-my-zsh `pyenv` plugin sees the shims already on $PATH and
-# doesn't print its "badly configured (missing pyenv shims in $PATH)" warning.
-# Also makes pyenv's python available to non-interactive shells and scripts.
-export PATH="$HOME/.pyenv/shims:$PATH"
+# Removes duplicate $PATH entries, keeping the first occurrence of each.
+# The while/heredoc form is used rather than `for x in $PATH` because zsh does
+# not word-split unquoted parameters, so the obvious loop silently does nothing.
+dedupe_path() {
+  local result='' entry
+  while IFS= read -r entry; do
+    [ -n "$entry" ] || continue
+    case ":$result:" in
+      *":$entry:"*) ;;
+      *) result="${result:+$result:}$entry" ;;
+    esac
+  done <<EOF
+$(printf '%s\n' "$PATH" | tr ':' '\n')
+EOF
+  PATH="$result"
+  export PATH
+}
 
-# Enable use of `gmake` aliased as `make`
-export PATH="/usr/local/opt/make/libexec/gnubin:$PATH"
-
-# Adds Homebrew to PATH on M1 machines
+# Homebrew — MUST come before everything else we prepend.
+#
+# `brew shellenv` runs macOS's path_helper, which REBUILDS $PATH from scratch
+# and hoists the system directories (and Homebrew's own bin) to the front. Any
+# dir we prepended BEFORE this line gets buried behind /opt/homebrew/bin. That
+# is exactly how `python3` used to resolve to Homebrew's Python instead of the
+# pyenv shims — which broke Terminal/set_up_terminal.sh, since Homebrew's
+# Python is PEP-668 "externally managed" and ships no setuptools.
 if [[ $APPLE_SILICON = "true" ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
+
+# Enable use of `gmake` aliased as `make`
+export PATH="/usr/local/opt/make/libexec/gnubin:$PATH"
 
 # llvm
 export PATH="/usr/local/opt/llvm/bin:$PATH"
@@ -37,14 +68,25 @@ export PATH="$DENO_INSTALL/bin:$PATH"
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
+export ANDROID_HOME="$HOME/Library/Android/sdk"
+export PATH="$ANDROID_HOME/platform-tools:$PATH"
+
+# Version-manager shims — deliberately AFTER the Homebrew block above, so that
+# `ruby`, `python3`, `pip3` & co. resolve to the rbenv/pyenv versions we pin in
+# .ruby-version / .python-version rather than to Homebrew's.
+export PATH="$HOME/.rbenv/shims:$PATH"
+export PATH="$HOME/.rbenv/bin:$PATH"
+export PATH="$HOME/.pyenv/shims:$PATH"
+
 # Claude Code / uv installer env — prepends ~/.local/bin (where the real
 # `claude` binary lives). Sourced here, before the personal-bin line below, so
-# the account-selecting shim ends up AHEAD of the real claude on PATH.
+# the account-selecting shim ends up AHEAD of the real claude on PATH. The
+# `env` file only exists when installed via uv, hence the explicit fallback.
 [ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
+[ -d "$HOME/.local/bin" ] && export PATH="$HOME/.local/bin:$PATH"
 
 # Personal bin — MUST be last so the `claude` account-selecting shim
 # (~/.dotfiles/bin/claude) shadows the real claude on PATH.
 export PATH="$HOME/.dotfiles/bin:$PATH"
 
-export ANDROID_HOME="$HOME/Library/Android/sdk"
-export PATH="$ANDROID_HOME/platform-tools:$PATH"
+dedupe_path

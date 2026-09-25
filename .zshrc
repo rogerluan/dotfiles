@@ -106,6 +106,12 @@ if which fnm > /dev/null; then
   eval "$(fnm env --use-on-cd --shell zsh)"
 fi
 
+# `rbenv init` and `fnm env` above both prepend their own shim dirs, which
+# .paths has already placed. Collapse the repeats (defined in .paths).
+if typeset -f dedupe_path > /dev/null; then
+  dedupe_path
+fi
+
 ################################################################################
 # Aliases
 ################################################################################
