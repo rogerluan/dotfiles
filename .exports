@@ -41,6 +41,11 @@ export FASTLANE_HIDE_PLUGINS_TABLE=true
 
 export NODE_OPTIONS='--disable-warning=ExperimentalWarning'
 
+# The AWS account denies almost every API call without MFA, so point every
+# `aws` invocation (and scripts like ./bin/docker) at the 36h session that the
+# `mfa` function in .aliases writes to the "mfa" profile.
+export AWS_PROFILE=mfa
+
 # Claude Code terminal behaviour.
 #
 # Keeps Claude Code OUT of the terminal's alternate screen buffer, so it prints

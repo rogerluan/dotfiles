@@ -232,12 +232,13 @@ _claude_config_dir_switch  # apply to the shell's starting directory
 # Sets up a 36h AWS session using MFA, storing it in the "mfa" profile.
 mfa() {
   local serial code creds
-  serial=$(aws iam list-mfa-devices --query "MFADevices[].SerialNumber" --output text | tr '\t' '\n' | grep ":mfa/" | head -1)
+  [ -n "$(aws configure get aws_access_key_id --profile default 2>/dev/null)" ] || { echo "No IAM access key in the default profile - run: aws configure --profile default"; return 1; }
+  serial=$(aws iam list-mfa-devices --profile default --query "MFADevices[].SerialNumber" --output text | tr '\t' '\n' | grep ":mfa/" | head -1)
   [ -n "$serial" ] || { echo "No authenticator-app MFA device enrolled - see one-time setup"; return 1; }
   echo "Using $serial"
   printf "MFA code: "
   read -r code
-  creds=$(aws sts get-session-token --serial-number "$serial" --token-code "$code" --duration-seconds 129600 --query "Credentials.[AccessKeyId,SecretAccessKey,SessionToken,Expiration]" --output text) || return 1
+  creds=$(aws sts get-session-token --profile default --serial-number "$serial" --token-code "$code" --duration-seconds 129600 --query "Credentials.[AccessKeyId,SecretAccessKey,SessionToken,Expiration]" --output text) || return 1
   aws configure set aws_access_key_id "$(printf '%s' "$creds" | cut -f1)" --profile mfa
   aws configure set aws_secret_access_key "$(printf '%s' "$creds" | cut -f2)" --profile mfa
   aws configure set aws_session_token "$(printf '%s' "$creds" | cut -f3)" --profile mfa
