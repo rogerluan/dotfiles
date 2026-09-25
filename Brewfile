@@ -1,6 +1,13 @@
-tap "heroku/brew"
-tap "homebrew/bundle"
-tap "robotsandpencils/made"
+# Taps
+#
+# Removed, and why — all four used to fail on a fresh machine:
+#   homebrew/bundle        deprecated & emptied; `brew bundle` is built in now.
+#   robotsandpencils/made  repo is gone (the project moved to XcodesOrg), so
+#                          tapping it failed and took `xcodes` down with it.
+#                          `xcodes` now ships in homebrew-core.
+#   heroku/brew            untrusted-tap errors; `heroku` is in homebrew-core.
+# dopplerhq/cli is kept because doppler is only distributed there — it needs
+# `brew trust --tap dopplerhq/cli`, which set_up_dependencies.sh runs first.
 tap "dopplerhq/cli"
 
 brew "aria2" # Download utility (enables faster Xcode downloads)
@@ -27,4 +34,5 @@ cask "asset-catalog-tinkerer" # https://github.com/insidegui/AssetCatalogTinkere
 cask "dopplerhq/cli/doppler" # https://www.doppler.com/ — distributed as a cask now, not a formula
 cask "iterm2" # Terminal replacement (configured via Terminal/Solarized Dark.json dynamic profile)
 cask "middleclick" # Utility to enable middle click on trackpads
-cask "tinypng4mac" # https://github.com/kyleduo/TinyPNG4Mac
+# cask "tinypng4mac" # https://github.com/kyleduo/TinyPNG4Mac — disabled upstream
+# on 2026-09-01 for failing the macOS Gatekeeper check. Install manually if needed.
