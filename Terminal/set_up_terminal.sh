@@ -28,19 +28,36 @@ if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlightin
 fi
 
 # Install powerline-shell font "Meslo Slashed"
-git clone git@github.com:powerline/fonts.git --depth=1
-cd fonts
-# This script uses a string argument to look for font with prefixes with the given string
-./install.sh "Meslo LG"
-cd ..
-rm -rf fonts
+# Clone into a scratch dir so a failure never leaves an untracked clone behind
+# inside this repo. Skipped entirely once the fonts are present — the clone is
+# ~11MB and the install triggers a slow system font-cache rebuild.
+if ! ls "$HOME/Library/Fonts/Meslo LG"*"for Powerline"* > /dev/null 2>&1; then
+  FONTS_TMP_DIR="$(mktemp -d)"
+  trap 'rm -rf "$FONTS_TMP_DIR"' EXIT
+  git clone git@github.com:powerline/fonts.git --depth=1 "$FONTS_TMP_DIR/fonts"
+  # This script uses a string argument to look for font with prefixes with the given string
+  (cd "$FONTS_TMP_DIR/fonts" && ./install.sh "Meslo LG")
+  rm -rf "$FONTS_TMP_DIR"
+  trap - EXIT
+else
+  echo "Powerline fonts are already installed."
+fi
 
 # Install powerline-shell
-git clone git@github.com:b-ryan/powerline-shell.git --depth=1
-cd powerline-shell
-python3 setup.py install # Note that this must be run only after pyenv has already been installed and is
-cd ..
-rm -rf powerline-shell
+# Targets the pyenv-managed Python EXPLICITLY rather than trusting whatever
+# `python3` resolves to: if this runs from a shell that predates the current
+# .paths, `python3` is Homebrew's, which is PEP-668 "externally managed" and
+# ships no setuptools. pip builds the package in an isolated env, so neither
+# `setup.py install` (removed in modern setuptools) nor a clone of our own is
+# needed.
+if ! command -v pyenv > /dev/null; then
+  echo "ERROR: pyenv is required — run ./set_up_dependencies.sh first." >&2
+  exit 1
+fi
+PYENV_PYTHON="$(pyenv which python3)"
+"$PYENV_PYTHON" -m pip install --upgrade "git+https://github.com/b-ryan/powerline-shell.git"
+# Regenerate shims so the freshly installed `powerline-shell` binary is on PATH.
+pyenv rehash
 
 # Open my custom Solarized Dark theme to apply it on Terminal
 open $DIR/Solarized\ Dark.terminal
@@ -66,6 +83,10 @@ ITERM_COLOR_PRESETS_DIR="$HOME/Library/Application Support/iTerm2/ColorPresets"
 mkdir -p "$ITERM_COLOR_PRESETS_DIR"
 cp "$DIR/Solarized Dark.itermcolors" "$ITERM_COLOR_PRESETS_DIR/Solarized Dark.itermcolors"
 
-echo "Copying $DOTFILES_DIR/Terminal/powerline-shell-config.json → $HOME/.config/powerline-shell/config.json"
-mkdir -p $HOME/.config/powerline-shell/
-cp $DOTFILES_DIR/Terminal/powerline-shell-config.json $HOME/.config/powerline-shell/config.json
+# Symlinked, not copied: powerline-shell only ever READS this file (see
+# find_config() upstream), so there's no atomic-rewrite problem like the one
+# that forces ~/.paseo/config.json to be a copy. A symlink means editing the
+# repo file takes effect on the next prompt, with no re-run and no copy-back.
+echo "Linking $DIR/powerline-shell-config.json → $HOME/.config/powerline-shell/config.json"
+mkdir -p "$HOME/.config/powerline-shell"
+ln -sfn "$DIR/powerline-shell-config.json" "$HOME/.config/powerline-shell/config.json"

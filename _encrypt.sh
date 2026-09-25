@@ -16,6 +16,12 @@ declare -a FILES_TO_ENCRYPT=(
   ".secrets"
   ".z"
   ".zsh_history"
+  # Which Claude account belongs in which slot: the ACCOUNT_LABEL_* /
+  # ACCOUNT_UUID_* pins read by bin/claude. Kept out of the repo in plaintext
+  # because it names orgs and this repo is public, but it has to be SOME kind of
+  # synced, or a new machine silently loses both the launch label and the
+  # identity guard (which is inert without a pin to compare against).
+  ".config/claude-accounts"
 )
 
 # Encrypt files or directories
@@ -31,6 +37,10 @@ function encrypt() {
 # Encrypt all the files declared above
 for ORIGINAL_FILENAME in "${FILES_TO_ENCRYPT[@]}"; do
   ORIGINAL_PATH="$SYSTEM_PATH/$ORIGINAL_FILENAME"
-  DESTINATION_PATH="$REPO_PATH/$ORIGINAL_FILENAME.encrypted"
-  encrypt $ORIGINAL_PATH $DESTINATION_PATH
+  # Flatten any nested path into a single filename: set_up_encrypted_resources.sh
+  # globs the repo root at -maxdepth 1, so ".config/foo.encrypted" would never be
+  # found (and would need a repo directory to be written into). The tarball
+  # carries the real path, so the archive's own name is free to be anything.
+  DESTINATION_PATH="$REPO_PATH/${ORIGINAL_FILENAME//\//-}.encrypted"
+  encrypt "$ORIGINAL_PATH" "$DESTINATION_PATH"
 done

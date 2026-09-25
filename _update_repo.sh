@@ -10,9 +10,6 @@ CODE_SNIPPETS_DIR="$HOME/Library/Developer/Xcode/UserData/CodeSnippets"
 echo "Encrypting necessary files…"
 source $DOTFILES_DIR/_encrypt.sh $1
 
-echo "Copying ~/.config/powerline-shell/config.json…"
-cp $HOME/.config/powerline-shell/config.json $DOTFILES_DIR/Terminal/powerline-shell-config.json
-
 # Paseo rewrites ~/.paseo/config.json atomically (so it can't be symlinked);
 # snapshot the daemon-config subset here on each repo update instead.
 echo "Copying ~/.paseo/config.json…"

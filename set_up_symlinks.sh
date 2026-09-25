@@ -4,21 +4,30 @@
 ### Set up symbolic links
 ################################################################################
 
-# TODO: Make this script idempotent
+set -e
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 # DOTFILES_DIR may have not been initialized yet, if this is the first time setting up .zshrc
-source .exports
+source "$DIR/.exports"
 
-ln -s $DOTFILES_DIR/.aliases $HOME/.aliases
-ln -s $DOTFILES_DIR/.exports $HOME/.exports
-ln -s $DOTFILES_DIR/.gemrc $HOME/.gemrc
-ln -s $DOTFILES_DIR/.markdownlintrc $HOME/.markdownlintrc
-ln -s $DOTFILES_DIR/.paths $HOME/.paths
-ln -s $DOTFILES_DIR/.ruby-version $HOME/.ruby-version
-ln -s $DOTFILES_DIR/.zprofile $HOME/.zprofile
-ln -s $DOTFILES_DIR/.zshenv $HOME/.zshenv
-ln -s $DOTFILES_DIR/.zshrc $HOME/.zshrc
-ln -s $DOTFILES_DIR/.python-version $HOME/.python-version
+# `-s` symlink, `-f` replace whatever is already there, `-n` treat an existing
+# symlink-to-a-directory as a file to replace rather than descending into it.
+# Without -f this printed a wall of "ln: …: File exists" on every re-run.
+for FILE in \
+  .aliases \
+  .exports \
+  .gemrc \
+  .markdownlintrc \
+  .paths \
+  .python-version \
+  .ruby-version \
+  .zprofile \
+  .zshenv \
+  .zshrc
+do
+  ln -sfn "$DOTFILES_DIR/$FILE" "$HOME/$FILE"
+done
 
 # Paseo config: COPIED, not symlinked — Paseo rewrites it atomically (temp +
 # rename), which replaces a symlink with a real file. Deploy only when absent so
@@ -27,10 +36,4 @@ ln -s $DOTFILES_DIR/.python-version $HOME/.python-version
 mkdir -p $HOME/.paseo
 [ -e $HOME/.paseo/config.json ] || cp $DOTFILES_DIR/.paseo/config.json $HOME/.paseo/config.json
 
-
-# TODO: We might not need this, this is why it's commented out. After going through the setup
-# steps in a new machine, check if the powerline shell utility works out of the box. If so,
-# then these lines can be safely deleted.
-# INSTALLED_POWERLINE_SHELL_BINARY_PATH=`find $HOME/.pyenv \( -name 'powerline-shell' \)`
-# POWERLINE_SHELL_BINARY_SYMLINK_PATH="/usr/local/bin/powerline-shell"
-# sudo ln -s $POWERLINE_SHELL_BINARY_PATH $POWERLINE_SHELL_BINARY_SYMLINK_PATH
+echo " * Symlinks set up successfully!"

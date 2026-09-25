@@ -8,19 +8,29 @@ Before doing anything, make sure you know what are you doing! Settings applied b
 
 ## Installation Steps
 
-1. Set up SSH keys
+1. Set up SSH keys. On a brand new machine this also installs the Xcode Command
+   Line Tools first (and waits for them), because without those `git` is only a
+   stub that opens an install dialog and fails.
 
 ```sh
 bash <(curl -s https://raw.githubusercontent.com/rogerluan/dotfiles/master/set_up_ssh_key.sh)
 ```
 
-2. Clone this repo into ~/.dotfiles
+2. Paste the public key it copied to your clipboard into the GitHub page it
+   opened, then clone this repo into ~/.dotfiles
 
 ```sh
 git clone git@github.com:rogerluan/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
-./_set_up.sh
+./_set_up.sh "<encryption key>"
 ```
+
+The argument is the passphrase used by `_encrypt.sh` to encrypt `.secrets` &
+co.; `set_up_encrypted_resources.sh` needs it to decrypt them.
+
+Every step is idempotent, so if one fails, fix the cause and re-run
+`./_set_up.sh` — it will skip everything that is already done. The steps are
+also runnable individually (`./set_up_dependencies.sh`, etc.).
 
 ## What Terminal is Roger using
 
@@ -67,7 +77,7 @@ dependencies that could manage their installation.
 - Visual Studio Code https://code.visualstudio.com/download
 - VLC https://www.videolan.org/vlc/
 - WhatsApp https://www.whatsapp.com/download/
-- Xcode - Install all the version needed via [`xcodes`](https://github.com/RobotsAndPencils/xcodes)
+- Xcode - Install all the version needed via [`xcodes`](https://github.com/XcodesOrg/xcodes) (installed via the Brewfile)
 - Zoom https://zoom.us/client/latest/zoomusInstallerFull.pkg?archType=arm64
 
 ### App Store
@@ -86,6 +96,7 @@ dependencies that could manage their installation.
 - Recurrence
 - Slack
 - SortingMatters
+- Tailscale
 - Telegram
 - Termius
 - Toggl
